@@ -15,18 +15,12 @@ const uri: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/login', userRoute)
-
-app.use('/users', userRoute)
-
+app.use('/users', userRoute);
 app.use('/userProfiles', usersProfileRoute)
-
 
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 )
-
-
 
 mongoose
     .connect(uri,()=> {

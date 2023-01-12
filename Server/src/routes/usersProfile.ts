@@ -8,10 +8,10 @@ usersProfileRoute.get("/", userProfileController.getAllUserProfiles)
 
 usersProfileRoute.post("/", userProfileController.createUserProfile)
 
-usersProfileRoute.get("/", userProfileController.getUserProfile)
+usersProfileRoute.get("/:Id", userProfileController.getUserProfile)
 
-usersProfileRoute.put("/", userProfileController.updateUserProfile)
+usersProfileRoute.put("/:Id", userProfileController.updateUserProfile)
 
-usersProfileRoute.delete("/", userProfileController.deleteUserProfile)
+usersProfileRoute.delete("/:Id", userProfileController.deleteUserProfile)
 
 export default usersProfileRoute;

@@ -99,4 +99,4 @@ const UserProfileSchema: Schema = new Schema(
 
 const userProfileModal = mongoose.model("UsersProfile", UserProfileSchema);
 
-module.exports = userProfileModal;
+export default userProfileModal;
