@@ -1,4 +1,3 @@
-//import { ILogin } from "../types/types"
 import mongoose, { model, Schema } from "mongoose"
 
 const UserSchema: Schema = new Schema(

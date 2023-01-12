@@ -3,7 +3,7 @@ import mongoose, { Collection, get } from "mongoose";
 import { ILogin } from "../types/types";
 
 
-const userModal = require('../modals/login');
+const userModal = require('../modals/user');
 
 const userLogin = async (req: Request, res: Response): Promise<void> => {
 
