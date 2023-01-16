@@ -17,12 +17,11 @@ const getAllUserProfiles = async (req: Request, res: Response) => {
 const createUserProfile = async (req: Request, res: Response) => {
     try {
         const body = req.body;
-        const newuser = await new userProfileModal(body).save();
+         await new userProfileModal(body).save();
         res
             .status(200)
             .json({ message: "created succesfully" })
     } catch (error) {
-        console.log(error)
         res.send(error);
     }
 }
@@ -35,17 +34,34 @@ const getUserProfile = async (req: Request, res: Response) => {
             .status(200)
             .json({ user: user })
     } catch (error) {
-        console.log(error)
         res.send(error);
     }
 }
 
 const updateUserProfile = async (req: Request, res: Response) => {
-    res.send('updating user profile with id')
+    try {
+        const params = req.params;
+        var myquery = { emp_ID: params.Id };
+        const user = await userProfileModal.updateOne({ emp_ID: params.Id }, req.body);
+        res
+            .status(200)
+            .json({ user: user })
+    } catch (error) {
+        res.send(error);
+    }
 }
 
 const deleteUserProfile = async (req: Request, res: Response) => {
-    res.send('deleting user profile with id')
+    try {
+        const params = req.params;
+        var myquery = { emp_ID: params.Id };
+        const user = await userProfileModal.deleteOne({ emp_ID: params.Id });
+        res
+            .status(200)
+            .json({ user: user })
+    } catch (error) {
+        res.send(error);
+    }
 }
 
 const userProfileController = {
