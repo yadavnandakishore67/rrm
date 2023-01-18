@@ -1,15 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { reducer } from "./slice";
+import { reducer } from "./reducer";
 
 
 const store = configureStore({
-    reducer:{
-       noOfOpenRequirements:reducer
-    },
+    reducer: reducer,
 })
 
-export default store
-
-
-
-
+export default store;
