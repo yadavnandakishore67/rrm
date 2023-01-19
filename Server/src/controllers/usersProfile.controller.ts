@@ -4,10 +4,10 @@ import userProfileModal from '../modals/userProfile';
 const getAllUserProfiles = async (req: Request, res: Response) => {
     try {
         const params = req.params;
-        const user = await userProfileModal.find();
+        const requestList = await userProfileModal.find();
         res
             .status(200)
-            .json({ users: user })
+            .json({ requestList: requestList })
     } catch (error) {
         console.log(error)
         res.send(error);
