@@ -29,7 +29,7 @@ export default function Login() {
   return (
     <>
       <section className="h-100 gradient-custom">
-        <div className="container pt-8 h-100">
+        <div className="container  pt-8 login-container">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col-12 col-md-6 col-lg-5 col-xl-5">
               <div className="card bg-white shadow-lg text-black">
