@@ -15,7 +15,7 @@ const uri: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use((req,res,next)=>{
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   next();
@@ -26,10 +26,9 @@ app.use('/userProfiles', usersProfileRoute)
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 )
-
+mongoose.set('strictQuery', false);
 mongoose
     .connect(uri,()=> {
         console.log('connected mango')
     })
-
     module.exports = mongoose; 

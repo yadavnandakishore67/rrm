@@ -1,5 +1,5 @@
 import { baseUrl } from "./constants";
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 
 export function get(url: string) {
@@ -7,7 +7,7 @@ export function get(url: string) {
     return axios.get(uri);
 }
 
-export function post(url: string, payload: any) {
+export function post(url: string, payload: any) :Promise<AxiosResponse> {
     const uri = baseUrl + url;
     return axios.post(uri, payload);
 }

@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import userProfileModal from '../modals/userProfile';
+import userProfileModal from '../schemas/userProfile';
 
 const getAllUserProfiles = async (req: Request, res: Response) => {
     try {

@@ -5,19 +5,20 @@ const userModal = require('../modals/user');
 const userLogin = async (req: Request, res: Response): Promise<void> => {
     try {
         const body = req.body;
-        console.log('body', body);
-        const resp = await userModal.find({ emp_ID: body.emp_ID });
+        const resp = await userModal.find({ emp_ID: body.emp_ID, password: body.password });
         if (resp.length > 0) {
             res
                 .status(200)
-                .json({ message: "Loged in succesfully" })
+                .json({ userDetails: resp, message: "Loged in succesfully" });
         } else {
-            throw { message: 'not a valid user' }
+            throw new Error("invalid credentials/not a valid user")
         }
 
-    } catch (error) {
-        console.log(error)
-        res.send(error);
+    } catch (error: any) {
+        console.log(JSON.stringify(error))
+        res
+            .status(401)
+            .json({ message: error.message });
     }
 }
 
