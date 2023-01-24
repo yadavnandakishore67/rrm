@@ -4,12 +4,11 @@ import { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUserRequested } from "../../store/backend.action";
 import { State } from "../../store/state";
-import './login.scss'
-import { UserDetails } from "../../utils/types";
+import './login.scss';
 
 export default function Login() {
-  const [empId, setempId] = useState('');
-  const [password, setPassword] = useState('');
+  const [empId, setempId] = useState<string>();
+  const [password, setPassword] = useState<string>('');
   const dispatch = useDispatch<any>();
   const userLoggerIn = useSelector((state: State) => state.userLoggedIn);
   const navigate = useNavigate();

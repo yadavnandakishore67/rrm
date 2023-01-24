@@ -13,3 +13,29 @@ export interface UserDetails {
     role: string,
     group: string,
 }
+
+export interface RequestForm {
+    tentativeBillingStartDate: string,
+    _id: string,
+    accountName: string,
+    clientInterivew: boolean
+    clientPartner: string
+    comments: string
+    costRateCap: number,
+    createdAt: string,
+    daysOpen: number
+    daysPassed: string,
+    enagagementManager: string,
+    experience: number,
+    interviewStatus: string,
+    location: string,
+    numberOfPositions: number,
+    numberOfPositionsFullfilled: number,
+    numberOfPositionsOffered: number
+    positionType: string,
+    practiceName: string,
+    requestDateToHiring: string,
+    requestDateToPractice: string,
+    role: string,
+    skillSet:string[]
+}
