@@ -16,6 +16,7 @@ export default function RequestList() {
   const naviagate = useNavigate();
   const dispatch = useDispatch<any>()
   const [expanded, setExpanded] = React.useState<string | false>(false);
+  
 
   const requestList = useSelector((state: State) => state.requestList);
   React.useEffect(() => {
@@ -32,7 +33,6 @@ export default function RequestList() {
     naviagate('/requestForm')
   }
   return (
-
     <div className="container pt-3 mw-600">
       <h4 >Request List:</h4>
       {
@@ -94,7 +94,7 @@ export default function RequestList() {
                     <p className="form-control-static">{req.role}</p>
                   </div>
                   <div className="col-sm-2 col-md-2 col-6  form-group">
-                    <label className="control-label fw-bold">Skils</label>
+                    <label className="control-label fw-bold">Skills</label>
                     <p>
                       {
                         req.skillSet.map((s,i) => <span key={i}>{s}</span>)
