@@ -1,6 +1,6 @@
 import { Response, Request, response } from "express";
+import userModal from "../schemas/user";
 
-const userModal = require('../modals/user');
 
 const userLogin = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -40,15 +40,15 @@ const createNewUser = async (req: Request, res: Response) => {
 const getUser = async (req: Request, res: Response) => {
 
     try {
-        const {id} = req.params
-        const users = await userModal.find({_id:id});
+        const { id } = req.params
+        const users = await userModal.find({ _id: id });
         res
             .status(200)
             .json({ users: users })
     } catch (error) {
         res.send(error);
     }
-    
+
 }
 
 const updateUser = async (req: Request, res: Response) => {

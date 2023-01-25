@@ -6,7 +6,6 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import { Link, useNavigate } from "react-router-dom";
-import candidateJson from "../../utils/candidate.json";
 import EditIcon from '@mui/icons-material/Edit';
 import { State } from "../../store/state";
 import { useSelector, useDispatch } from "react-redux";
@@ -29,7 +28,6 @@ export default function RequestList() {
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
-  const [rows] = React.useState(candidateJson);
   const navigateToForm = () => {
     naviagate('/requestForm')
   }
@@ -38,7 +36,7 @@ export default function RequestList() {
     <div className="container pt-3 mw-600">
       <h4 >Request List:</h4>
       {
-        requestList.map((req: RequestForm, i: number) => (
+        requestList?.map((req: RequestForm, i: number) => (
           <Accordion
             key={i}
             expanded={expanded === `panel${i}`}
@@ -99,7 +97,7 @@ export default function RequestList() {
                     <label className="control-label fw-bold">Skils</label>
                     <p>
                       {
-                        req.skillSet.map(s => <span>{s}</span>)
+                        req.skillSet.map((s,i) => <span key={i}>{s}</span>)
                       }
                     </p>
                   </div>
