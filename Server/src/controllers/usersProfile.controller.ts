@@ -1,10 +1,11 @@
 import { Response, Request } from "express";
 import userProfileModal from '../schemas/userProfile';
+import APIError from "../errors/APIError";
+import userModal from '../schemas/user';
 
 const getAllUserProfiles = async (req: Request, res: Response) => {
     try {
-        const params = req.params;
-        const requestList = await userProfileModal.find();
+        const requestList = await userProfileModal.find().populate('createdBy');
         res
             .status(200)
             .json({ requestList: requestList })
@@ -14,22 +15,30 @@ const getAllUserProfiles = async (req: Request, res: Response) => {
     }
 }
 
-const createUserProfile = async (req: Request, res: Response) => {
+const createUserProfile = async (req: any, res: any) => {
+  
     try {
-        const body = req.body;
-         await new userProfileModal(body).save();
+        const body = req.body
+
+        const userProfile = new userProfileModal(body);
+        console.log("user Profile Modal", userProfileModal);
+
+         const result = await userProfile.save();
+
+         console.log(result)
         res
-            .status(200)
+            .status(201)
             .json({ message: "created succesfully" })
     } catch (error) {
         res.send(error);
     }
+
 }
 
 const getUserProfile = async (req: Request, res: Response) => {
     try {
-        const params = req.params;
-        const user = await userProfileModal.find({ emp_ID: params.Id });
+        const {id} = req.params;
+        const user = await userProfileModal.find({ _id: id });
         res
             .status(200)
             .json({ user: user })
@@ -38,11 +47,10 @@ const getUserProfile = async (req: Request, res: Response) => {
     }
 }
 
-const updateUserProfile = async (req: Request, res: Response) => {
+const updateUserProfile = async (req: Request, res: Response, next:any) => {
     try {
-        const params = req.params;
-        var myquery = { emp_ID: params.Id };
-        const user = await userProfileModal.updateOne({ emp_ID: params.Id }, req.body);
+        const {id} = req.params;
+        const user = await userProfileModal.updateOne({ _id: id }, req.body);
         res
             .status(200)
             .json({ user: user })
@@ -53,9 +61,8 @@ const updateUserProfile = async (req: Request, res: Response) => {
 
 const deleteUserProfile = async (req: Request, res: Response) => {
     try {
-        const params = req.params;
-        var myquery = { emp_ID: params.Id };
-        const user = await userProfileModal.deleteOne({ emp_ID: params.Id });
+        const {id} = req.params;
+        const user = await userProfileModal.deleteOne({ _id: id });
         res
             .status(200)
             .json({ user: user })
@@ -64,12 +71,28 @@ const deleteUserProfile = async (req: Request, res: Response) => {
     }
 }
 
+const getUserProfilesByUserId =async (req:Request, res: Response) => {
+    try {
+        const {UserId} = req.params;
+        
+        const userProfiles = await userProfileModal.find().populate('createdBy', 'emp_ID')
+       
+        const result = userProfiles.filter((profile)=> {
+            return profile.createdBy.emp_ID === UserId;
+        })
+        res.status(200).json({data: result})
+    } catch(error) {
+        res.send(error)
+    }
+}
+
 const userProfileController = {
     getAllUserProfiles,
     createUserProfile,
     getUserProfile,
     updateUserProfile,
-    deleteUserProfile
+    deleteUserProfile,
+    getUserProfilesByUserId
 }
 
 export default userProfileController;

@@ -14,4 +14,6 @@ usersProfileRoute.put("/:Id", userProfileController.updateUserProfile)
 
 usersProfileRoute.delete("/:Id", userProfileController.deleteUserProfile)
 
+usersProfileRoute.get('/Users/:UserId', userProfileController.getUserProfilesByUserId)
+
 export default usersProfileRoute;

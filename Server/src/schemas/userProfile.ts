@@ -20,7 +20,7 @@ const UserProfileSchema: Schema = new Schema(
         },
         tentativeBillingStartDate: {
             type: Date,
-            required: true,
+            default: () => new Date()
         },
 
         daysPassed: {
@@ -28,7 +28,7 @@ const UserProfileSchema: Schema = new Schema(
         },
 
         skillSet: {
-            type: Array<String>,
+            type: [String],
             required: true,
         },
         experience: {
@@ -63,13 +63,15 @@ const UserProfileSchema: Schema = new Schema(
             required: true
         },
         requestDateToPractice: {
-            type: Date
+            type: Date,
+            default: () => new Date()
         },
         Duration: {
             type: Number
         },
         requestDateToHiring: {
-            type: Date
+            type: Date,
+            default: () => new Date()
         },
         daysOpen: {
             type: Number
@@ -87,13 +89,17 @@ const UserProfileSchema: Schema = new Schema(
             type: String
         },
         clientInterivew: {
-            type: Boolean
+            type: Boolean,
+            default:false
         },
         comments: {
-            type: Array<String>
+            type: [String]
+        },
+        createdBy: {
+            type: Schema.Types.ObjectId,
+            ref:'User'
         }
-    },
-    { timestamps: true }
+    }
 )
 
 

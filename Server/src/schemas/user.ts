@@ -39,7 +39,6 @@ const UserSchema: Schema = new Schema(
     { timestamps: true }
 )
 
-//export default model<ILogin>("Users", UserSchema);
-const userModal = mongoose.model("Users", UserSchema);
-//export default = userModal;
-module.exports = userModal;
+
+const userModal = mongoose.model("User", UserSchema);
+export default  userModal;

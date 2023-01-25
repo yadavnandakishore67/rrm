@@ -23,7 +23,14 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
 }
 
 const getAllUsers = async (req: Request, res: Response) => {
-    res.send('getting All Users');
+    try {
+        const users = await userModal.find();
+        res
+            .status(200)
+            .json({ users: users })
+    } catch (error) {
+        res.send(error);
+    }
 }
 
 const createNewUser = async (req: Request, res: Response) => {
@@ -31,7 +38,17 @@ const createNewUser = async (req: Request, res: Response) => {
 }
 
 const getUser = async (req: Request, res: Response) => {
-    res.send(' getting user with id')
+
+    try {
+        const {id} = req.params
+        const users = await userModal.find({_id:id});
+        res
+            .status(200)
+            .json({ users: users })
+    } catch (error) {
+        res.send(error);
+    }
+    
 }
 
 const updateUser = async (req: Request, res: Response) => {
