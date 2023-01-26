@@ -23,6 +23,8 @@ export default function RequestList() {
   const naviagate = useNavigate();
   const dispatch = useDispatch<any>()
   const [expanded, setExpanded] = React.useState<string | false>(false);
+
+  const userName = useSelector((state: State) => state.userName);
   
 
   const requestList = useSelector((state: State) => state.requestList);
@@ -30,6 +32,10 @@ export default function RequestList() {
   React.useEffect(() => {
     console.log(requestList)
   }, [requestList]);
+
+  React.useEffect(() => {
+    console.log(userName)
+  }, [userName]);
 
   React.useEffect(() => {
     dispatch(getRequestList())
@@ -41,7 +47,7 @@ export default function RequestList() {
     };
 
   const navigateToForm = () => {
-    naviagate('/requestForm')
+    naviagate('/requestForm',{state:{userName:userName}})
   }
 
   const isDate = (date: string | number | Date | boolean) => {

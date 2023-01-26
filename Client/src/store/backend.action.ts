@@ -17,3 +17,10 @@ export const loginUserRequested = createAsyncThunk(
         return resp.data.userDetails[0];
     }
 )
+
+export const getRequestedUserProfile = createAsyncThunk(
+    BackendActionTypes.GetRequirementDetails,async(id:string)=>{
+        const resp = await get(`userProfiles/Users/${id}`);
+        return resp.data.data[0]
+    }
+)

@@ -12,6 +12,7 @@ export interface State {
     userName?: string,
     count: number,
     requestList: RequestForm[],
+    requestDetails?: RequestForm,
     userDetails?: UserDetails,
     userLoggedIn: boolean
 }

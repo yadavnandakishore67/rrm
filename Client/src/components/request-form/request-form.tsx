@@ -8,8 +8,12 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import './request-form.scss'
+import { useDispatch, useSelector } from "react-redux";
+import { getRequestedUserProfile } from "../../store/backend.action";
+import React from "react";
+import { State } from "../../store/state";
 
 interface IFormInput {
   role: string;
@@ -42,6 +46,21 @@ interface IFormInput {
 const skills = ["Java", "Python", "Javascript", "Angular", "React"];
 
 export default function RequestForm() {
+
+  const dispatch = useDispatch<any>()
+
+  const requestDetails = useSelector((state: State) => state.requestDetails);
+
+  const location = useLocation();
+
+  React.useEffect(() => {
+    console.log(requestDetails)
+  }, [requestDetails]);
+
+  React.useEffect(() => {
+    dispatch(getRequestedUserProfile(location.state.userName))
+  }, []);
+  
   let {
     register,
     handleSubmit,
@@ -79,6 +98,7 @@ export default function RequestForm() {
               {...register("accountName", {
                 required: true,
               })}
+              value={requestDetails?.accountName}
             />
             {errors.accountName?.type === "required" && (
               <p>This field is required</p>
@@ -94,6 +114,7 @@ export default function RequestForm() {
               {...register("engagementManager", {
                 required: true,
               })}
+              value={requestDetails?.enagagementManager}
             />
             {errors.engagementManager?.type === "required" && (
               <p>This field is required</p>
@@ -108,6 +129,7 @@ export default function RequestForm() {
               {...register("clientPartner", {
                 required: true,
               })}
+              value={requestDetails?.clientPartner}
             />
             {errors.clientPartner?.type === "required" && (
               <p>This field is required</p>
@@ -123,6 +145,7 @@ export default function RequestForm() {
                 required: true,
                 pattern: /^[A-Za-z]+$/i,
               })}
+              value={requestDetails?.role}
             />
             {errors.role?.type === "required" && (
               <p>This field is required</p>
@@ -143,6 +166,7 @@ export default function RequestForm() {
                       label={option}
                       size="small"
                       {...getTagProps({ index })}
+                      
                     />
                   ))
                 }
@@ -170,6 +194,7 @@ export default function RequestForm() {
               {...register("experience", {
                 required: true,
               })}
+              value={requestDetails?.experience}
             />
             {errors.experience && <p>This field is required</p>}
           </div>
@@ -183,6 +208,7 @@ export default function RequestForm() {
               {...register("practiceName", {
                 required: true,
               })}
+              value={requestDetails?.practiceName}
             />
             {errors.practiceName?.type === "required" && (
               <p>This field is required</p>
@@ -197,6 +223,7 @@ export default function RequestForm() {
               {...register("subPractice", {
                 required: true,
               })}
+              value={requestDetails?.subPractice}
             />
             {errors.subPractice?.type === "required" && (
               <p>This field is required</p>
@@ -215,6 +242,7 @@ export default function RequestForm() {
             {errors.subSubPractice?.type === "required" && (
               <p>This field is required</p>
             )}
+            value={requestDetails?.subSubPractice}
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -225,6 +253,7 @@ export default function RequestForm() {
               {...register("numberOfPositions", {
                 required: true,
               })}
+              value={requestDetails?.numberOfPositions}
             />
             {errors.numberOfPositions?.type === "required" && (
               <p>This field is required</p>
@@ -240,6 +269,7 @@ export default function RequestForm() {
               {...register("numberOfPositionsOffered", {
                 required: true,
               })}
+              value={requestDetails?.numberOfPositionsOffered}
             />
             {errors.numberOfPositionsOffered?.type === "required" && (
               <p>This field is required</p>
@@ -254,6 +284,7 @@ export default function RequestForm() {
               {...register("numberOfPositionsFullFilled", {
                 required: true,
               })}
+              value={requestDetails?.numberOfPositionsFullfilled}
             />
             {errors.numberOfPositionsFullFilled?.type === "required" && (
               <p>This field is required</p>
@@ -268,6 +299,7 @@ export default function RequestForm() {
                 labelId="demo-simple-select-label"
                 label="Interview status"
                 {...register("interviewStatus", { required: true })}
+                value={requestDetails?.interviewStatus}
               >
                 <MenuItem value={"selected"}>Selected</MenuItem>
                 <MenuItem value={"pending"}>Pending</MenuItem>
@@ -288,6 +320,7 @@ export default function RequestForm() {
               {...register("costRateCap", {
                 required: true,
               })}
+              value={requestDetails?.costRateCap}
             />
             {errors.costRateCap && <p>This field is required</p>}
           </div>
@@ -301,6 +334,7 @@ export default function RequestForm() {
               {...register("tentativeBillingStartDate", {
                 required: true,
               })}
+              value={requestDetails?.tentativeBillingStartDate}
             />
             {errors.tentativeBillingStartDate?.type === "required" && (
               <p>This field is required</p>
@@ -314,6 +348,7 @@ export default function RequestForm() {
                 labelId="positionType"
                 label="Position type"
                 {...register("positionType", { required: true })}
+                value={requestDetails?.positionType}
               >
                 <MenuItem value={"billable"}>Billable</MenuItem>
                 <MenuItem value={"buffer"}>Buffer</MenuItem>
@@ -330,6 +365,7 @@ export default function RequestForm() {
                 labelId="location"
                 label="Location"
                 {...register("location", { required: true })}
+                value={requestDetails?.location}
               >
                 <MenuItem value={"gurugram"}>Gurugram</MenuItem>
                 <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
@@ -350,6 +386,7 @@ export default function RequestForm() {
               {...register("requestDateToPractice", {
                 required: true,
               })}
+              value={requestDetails?.requestDateToPractice}
             />
             {errors.requestDateToPractice?.type === "required" && (
               <p>This field is required</p>
@@ -374,6 +411,7 @@ export default function RequestForm() {
                 labelId="status"
                 label="Status"
                 {...register("status", { required: true })}
+                value={requestDetails?.status}
               >
                 <MenuItem value={"open"}>Open</MenuItem>
                 <MenuItem value={"close"}>Close</MenuItem>
@@ -392,6 +430,7 @@ export default function RequestForm() {
               {...register("daysOpen", {
                 required: true,
               })}
+              value={requestDetails?.daysOpen}
             />
             {errors.daysOpen?.type === "required" && (
               <p>This field is required</p>
@@ -406,6 +445,7 @@ export default function RequestForm() {
               {...register("daysPassed", {
                 required: true,
               })}
+              value={requestDetails?.daysPassed}
             />
             {errors.daysPassed?.type === "required" && (
               <p>This field is required</p>
@@ -426,6 +466,7 @@ export default function RequestForm() {
             {errors.requestDateToPractice?.type === "required" && (
               <p>This field is required</p>
             )}
+            value={requestDetails?.requestDateToPractice}
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <FormControl fullWidth className="select-input" size="small">
@@ -434,6 +475,7 @@ export default function RequestForm() {
                 labelId="client-interview"
                 label="Client interview"
                 {...register("clientInterview", { required: true })}
+                value={requestDetails?.clientInterivew}
               >
                 <MenuItem value={"yes"}>Yes</MenuItem>
                 <MenuItem value={"no"}>No</MenuItem>
@@ -453,6 +495,7 @@ export default function RequestForm() {
               rows={4}
               size="small"
               {...register("comments")}
+              value={requestDetails?.comments}
             />
           </div>
         </div>

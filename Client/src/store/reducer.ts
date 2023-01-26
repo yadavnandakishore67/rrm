@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { UserDetails } from '../utils/types';
-import { getRequestList, loginUserRequested } from './backend.action';
+import { RequestForm, UserDetails } from '../utils/types';
+import { getRequestedUserProfile, getRequestList, loginUserRequested } from './backend.action';
 import { initialState } from './state';
 
 const slice = createSlice({
@@ -23,7 +23,14 @@ const slice = createSlice({
                 return {
                     ...state,
                     userDetails: action.payload,
-                    userLoggedIn:true
+                    userLoggedIn:true,
+                    userName:action.payload.emp_ID
+                }
+            })
+            builder.addCase(getRequestedUserProfile.fulfilled, (state: any, action: { payload: any }) => {
+                return {
+                    ...state,
+                    requestDetails: action.payload
                 }
             })
     }

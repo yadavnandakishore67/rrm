@@ -34,8 +34,11 @@ export interface RequestForm {
     numberOfPositionsOffered: number
     positionType: string,
     practiceName: string,
+    subPractice: string,
+    subSubPractice: string,
     requestDateToHiring: string,
     requestDateToPractice: string,
     role: string,
-    skillSet:string[]
+    skillSet: string[],
+    status:string
 }
