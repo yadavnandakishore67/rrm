@@ -17,7 +17,7 @@ import { RequestForm } from "../../utils/types";
 import moment, { MomentInput } from "moment";
 import SearchFilter from "../search/search";
 import { requestFormBody, requestFormHeader } from "../../utils/requestListObj";
-
+import { Pagination } from "@mui/material";
 
 export default function RequestList() {
   const naviagate = useNavigate();
@@ -46,13 +46,19 @@ export default function RequestList() {
       setExpanded(isExpanded ? panel : false);
     };
 
-  const navigateToForm = () => {
-    naviagate('/requestForm',{state:{userName:userName}})
+  const navigateToForm = (req?:any) => {
+    naviagate('/requestForm',{state:{details:req}})
   }
 
   const isDate = (date: string | number | Date | boolean) => {
     return moment(date as MomentInput, moment.ISO_8601, true).isValid();
   }
+
+ const [page, setPage] = React.useState(1); 
+ const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {    setPage(value);  };  
+  
+
+  const currentData = requestList.slice((page - 1) * 2, page * 2);
   return (
 
     <div className="container pt-3 mh-600">
@@ -68,8 +74,8 @@ export default function RequestList() {
       </div>
       <SearchFilter />
       {
-        requestList ?
-          requestList?.map((req: RequestForm, i: number) => (
+        currentData ?
+        currentData?.map((req: RequestForm, i: number) => (
             <Accordion
               key={i}
               expanded={expanded === `panel${i}`}
@@ -90,10 +96,10 @@ export default function RequestList() {
                       })
                     }
                     <div className="col-md-2 col-sm-12 col-12 ">
-                      <Button variant="outlined" className="float-end" onClick={navigateToForm}>
+                      <Button variant="outlined" className="float-end" onClick={()=>navigateToForm(req)}>
                         <EditIcon></EditIcon>
                       </Button>
-                      <Button variant="outlined" className="float-end" onClick={navigateToForm}>
+                      <Button variant="outlined" className="float-end" onClick={()=>navigateToForm(req)}>
                         <NotInterestedIcon></NotInterestedIcon>
                       </Button>
                     </div>
@@ -124,6 +130,9 @@ export default function RequestList() {
             </Accordion>
           )) : <div className="text-center pt-5">No results found</div>
       }
+      <div className="col-sm-4 col-md-2 col-12 pt-3 float-end">
+      <Pagination count={Math.ceil(requestList.length / 2)}  page={page}  onChange={handlePageChange}/>
+        </div>
     </div>
 
   );

@@ -66,7 +66,7 @@ const UserProfileSchema: Schema = new Schema(
             type: Date,
             default: () => new Date()
         },
-        Duration: {
+        duration: {
             type: Number
         },
         requestDateToHiring: {
