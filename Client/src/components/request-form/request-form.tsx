@@ -8,8 +8,12 @@ import Button from "@mui/material/Button";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useLocation, useNavigate } from "react-router";
 import './request-form.scss'
-import { State } from "../../store/state";
-import { useSelector } from "react-redux";
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import React from "react";
+import { Dayjs } from 'dayjs';
 
 interface IFormInput {
   role: string;
@@ -43,11 +47,9 @@ const skills = ["Java", "Python", "Javascript", "Angular", "React"];
 
 export default function RequestForm() {
 
-  const requestDetails = useSelector((state: State) => state.requestDetails);
-
   const location = useLocation();
 
-  const profileDetails = location.state.details;
+  const profileDetails = location?.state?.details ? location.state.details : {};
 
   let {
     register,
@@ -61,6 +63,11 @@ export default function RequestForm() {
   }
 
   const navigate = useNavigate();
+  const [tentativeBillingStartDate, setTentativeBillingStartDate] = React.useState<Dayjs | null>(null);
+  const [requestDateToPractice, setRequestDateToPractice] = React.useState<Dayjs | null>(null);
+  const [requestDateToHiring, setRequestDateToHiring] = React.useState<Dayjs | null>(null);
+
+
   const routeUrl = () => {
     navigate('/requestList')
   }
@@ -68,15 +75,15 @@ export default function RequestForm() {
     <div className="card bg-white shadow-lg text-black">
       <div className="container pt-3">
         <div className="row pb-2">
-        <div className="col-sm-8 col-md-8 col-8">
-          <h4 >Request Form</h4>
-        </div>
-        <div className="col-sm-4 col-md-4 col-4 text-end">
-        <Button variant="outlined" onClick={routeUrl} >
+          <div className="col-sm-8 col-md-8 col-8">
+            <h4 >Request Form</h4>
+          </div>
+          <div className="col-sm-4 col-md-4 col-4 text-end">
+            <Button variant="outlined" onClick={routeUrl} >
               Back
             </Button>
+          </div>
         </div>
-      </div>
       </div>
 
       <form className="container p-4" onSubmit={handleSubmit(formData)}>
@@ -153,6 +160,7 @@ export default function RequestForm() {
                   limitTags={1}
                   id="skillSet"
                   options={skills}
+                  value={profileDetails.skillSet}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -168,9 +176,7 @@ export default function RequestForm() {
                 />
               )}
             />
-            {errors.skillSet?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            {errors.skillSet && <p>This field is required</p>}
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -312,16 +318,19 @@ export default function RequestForm() {
             {errors.costRateCap && <p>This field is required</p>}
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Tentative billing start date"
-              type="Date"
-              InputLabelProps={{ shrink: true }}
-              variant="outlined"
-              size="small"
-              {...register("tentativeBillingStartDate", {
-                required: true,
-              })}
-            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Tentative billing start date"
+                value={profileDetails.tentativeBillingStartDate ? profileDetails.tentativeBillingStartDate : tentativeBillingStartDate}
+                onChange={(newValue) => {
+                  setTentativeBillingStartDate(newValue);
+                }}
+                renderInput={(params) => <TextField {...params}
+                  {...register("tentativeBillingStartDate", {
+                    required: true,
+                  })} />}
+              />
+            </LocalizationProvider>
             {errors.tentativeBillingStartDate?.type === "required" && (
               <p>This field is required</p>
             )}
@@ -363,16 +372,19 @@ export default function RequestForm() {
             )}
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Request date to practice"
-              type="Date"
-              InputLabelProps={{ shrink: true }}
-              variant="outlined"
-              size="small"
-              {...register("requestDateToPractice", {
-                required: true,
-              })}
-            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Request date to practice"
+                value={profileDetails.requestDateToPractice ? profileDetails.requestDateToPractice : requestDateToPractice}
+                onChange={(newValue) => {
+                  setRequestDateToPractice(newValue);
+                }}
+                renderInput={(params) => <TextField {...params}
+                  {...register("requestDateToPractice", {
+                    required: true,
+                  })} />}
+              />
+            </LocalizationProvider>
             {errors.requestDateToPractice?.type === "required" && (
               <p>This field is required</p>
             )}
@@ -439,16 +451,20 @@ export default function RequestForm() {
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Request date to hiring"
-              type="Date"
-              InputLabelProps={{ shrink: true }}
-              variant="outlined"
-              size="small"
-              {...register("requestDateToHiring", {
-                required: true,
-              })}
-            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Request date to hiring"
+                value={profileDetails.requestDateToHiring ? profileDetails.requestDateToHiring : requestDateToHiring}
+                onChange={(newValue) => {
+                  setRequestDateToHiring(newValue);
+                }}
+                renderInput={(params) => <TextField {...params}
+                  {...register("requestDateToHiring", {
+                    required: true,
+                  })}
+                />}
+              />
+            </LocalizationProvider>
             {errors.requestDateToPractice?.type === "required" && (
               <p>This field is required</p>
             )}
@@ -460,6 +476,7 @@ export default function RequestForm() {
                 labelId="client-interview"
                 label="Client interview"
                 {...register("clientInterivew", { required: true })}
+                value={profileDetails?.clientInterivew ? 'yes' : 'no'}
               >
                 <MenuItem value={"yes"}>Yes</MenuItem>
                 <MenuItem value={"no"}>No</MenuItem>
@@ -476,6 +493,7 @@ export default function RequestForm() {
               rows={4}
               size="small"
               {...register("comments")}
+              value={profileDetails?.comments}
             />
           </div>
         </div>
@@ -486,6 +504,5 @@ export default function RequestForm() {
         </div>
       </form>
     </div>
-
   );
 }

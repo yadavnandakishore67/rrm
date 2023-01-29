@@ -25,7 +25,6 @@ export default function RequestList() {
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
   const userName = useSelector((state: State) => state.userName);
-  
 
   const requestList = useSelector((state: State) => state.requestList);
 
@@ -46,19 +45,18 @@ export default function RequestList() {
       setExpanded(isExpanded ? panel : false);
     };
 
-  const navigateToForm = (req?:any) => {
-    naviagate('/requestForm',{state:{details:req}})
+  const navigateToForm = (req?: any) => {
+    naviagate('/requestForm', { state: { details: req } })
   }
 
   const isDate = (date: string | number | Date | boolean) => {
     return moment(date as MomentInput, moment.ISO_8601, true).isValid();
   }
 
- const [page, setPage] = React.useState(1); 
- const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {    setPage(value);  };  
-  
+  const [page, setPage] = React.useState(1);
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => { setPage(value); };
 
-  const currentData = requestList.slice((page - 1) * 2, page * 2);
+  const currentData = requestList.slice((page - 1) * 10, page * 10);
   return (
 
     <div className="container pt-3 mh-600">
@@ -75,7 +73,7 @@ export default function RequestList() {
       <SearchFilter />
       {
         currentData ?
-        currentData?.map((req: RequestForm, i: number) => (
+          currentData?.map((req: RequestForm, i: number) => (
             <Accordion
               key={i}
               expanded={expanded === `panel${i}`}
@@ -90,16 +88,16 @@ export default function RequestList() {
                   <div className="row">
                     {
                       Object.entries(requestFormHeader).map(([key, val]) => {
-                        return <Typography className="col-md-2 col-sm-4 col-6">
+                        return <Typography key={key} className="col-md-2 col-sm-4 col-6">
                           {val}: {req[(key as keyof RequestForm)]}
                         </Typography>
                       })
                     }
                     <div className="col-md-2 col-sm-12 col-12 ">
-                      <Button variant="outlined" className="float-end" onClick={()=>navigateToForm(req)}>
+                      <Button variant="outlined" className="float-end" onClick={() => navigateToForm(req)}>
                         <EditIcon></EditIcon>
                       </Button>
-                      <Button variant="outlined" className="float-end" onClick={()=>navigateToForm(req)}>
+                      <Button variant="outlined" className="float-end" onClick={() => navigateToForm(req)}>
                         <NotInterestedIcon></NotInterestedIcon>
                       </Button>
                     </div>
@@ -131,8 +129,8 @@ export default function RequestList() {
           )) : <div className="text-center pt-5">No results found</div>
       }
       <div className="col-sm-4 col-md-2 col-12 pt-3 float-end">
-      <Pagination count={Math.ceil(requestList.length / 2)}  page={page}  onChange={handlePageChange}/>
-        </div>
+        <Pagination count={Math.ceil(requestList.length / 10)} page={page} onChange={handlePageChange} />
+      </div>
     </div>
 
   );
