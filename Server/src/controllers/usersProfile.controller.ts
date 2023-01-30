@@ -2,10 +2,11 @@ import { Response, Request } from "express";
 import userProfileModal from '../schemas/userProfile';
 import APIError from "../errors/APIError";
 import userModal from '../schemas/user';
+import path from "path";
 
 const getAllUserProfiles = async (req: Request, res: Response) => {
     try {
-        const requestList = await userProfileModal.find().populate('createdBy');
+        const requestList = await userProfileModal.find().populate(['createdBy','enagagementManager']);
         res
             .status(200)
             .json({ requestList: requestList })
@@ -21,7 +22,6 @@ const createUserProfile = async (req: any, res: any) => {
         const body = req.body
 
         const userProfile = new userProfileModal(body);
-        console.log("user Profile Modal", userProfileModal);
 
          const result = await userProfile.save();
 

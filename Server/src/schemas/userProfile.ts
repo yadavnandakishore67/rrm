@@ -7,8 +7,8 @@ const UserProfileSchema: Schema = new Schema(
             required: true,
         },
         enagagementManager: {
-            type: String,
-            required: true
+            type: Schema.Types.ObjectId,
+            ref: 'User'
         },
         clientPartner: {
             type: String,
@@ -20,17 +20,17 @@ const UserProfileSchema: Schema = new Schema(
         },
         tentativeBillingStartDate: {
             type: Date,
-            default: () => new Date()
+            default: () => new Date().toLocaleDateString()
         },
-
         daysPassed: {
-            type: String,
+            type: Number,  //TODO: calculation --  Virtuals
+            default: 0
         },
-
-        skillSet: {
-            type: [String],
-            required: true,
-        },
+        skillSet: [
+            {
+            type: String
+            }
+        ],
         experience: {
             type: Number,
             required:true
@@ -63,18 +63,19 @@ const UserProfileSchema: Schema = new Schema(
             required: true
         },
         requestDateToPractice: {
-            type: Date,
-            default: () => new Date()
+            type: String,
+            default: () => new Date().toLocaleDateString()
         },
         duration: {
             type: Number
         },
         requestDateToHiring: {
-            type: Date,
-            default: () => new Date()
+            type: String,
+            default: () => new Date().toLocaleDateString()
         },
         daysOpen: {
-            type: Number
+            type: Number,   //TODO: calculation
+            default:0
         },
         numberOfPositionsFullfilled: {
             type: Number
@@ -86,20 +87,27 @@ const UserProfileSchema: Schema = new Schema(
             type: String
         },
         status: {
-            type: String
+            type: String   // active, freeze, close, rejected, ....
         },
         clientInterivew: {
             type: Boolean,
             default:false
         },
-        comments: {
-            type: [String]
-        },
+        comments:[{
+            author: {
+                type: Schema.Types.ObjectId,
+                ref:'User'
+            },
+            comment:{
+                type:String
+            }
+        }],
         createdBy: {
             type: Schema.Types.ObjectId,
             ref:'User'
         }
-    }
+    },
+    { timestamps:true }
 )
 
 
