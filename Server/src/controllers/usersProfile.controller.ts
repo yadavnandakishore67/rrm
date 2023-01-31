@@ -4,9 +4,9 @@ import APIError from "../errors/APIError";
 import userModal from '../schemas/user';
 import path from "path";
 
-const getAllUserProfiles = async (req: Request, res: Response) => {
+const getAllUserProfiles = async (req: Request, res: Response) => { 
     try {
-        const requestList = await userProfileModal.find().populate(['createdBy','enagagementManager']);
+        const requestList = await userProfileModal.find().populate([{path:'createdBy',select:'first_name'},{path:'enagagementManager',select:'first_name'},{path:'comments.author',select:'first_name'}]);
         res
             .status(200)
             .json({ requestList: requestList })

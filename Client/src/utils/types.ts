@@ -20,12 +20,12 @@ export interface RequestForm {
     accountName: string,
     clientInterivew: boolean
     clientPartner: string
-    comments: string
+    comments: Comments[]
     costRateCap: number,
     createdAt: string,
     daysOpen: number
     daysPassed: string,
-    enagagementManager: string,
+    enagagementManager: User,
     experience: number,
     interviewStatus: string,
     location: string,
@@ -40,5 +40,15 @@ export interface RequestForm {
     requestDateToPractice: string,
     role: string,
     skillSet: string[],
-    status:string
+    status: string
+}
+
+export interface Comments {
+    author: User,
+    comment: string,
+}
+
+export interface User {
+    _id: string,
+    first_name: string
 }

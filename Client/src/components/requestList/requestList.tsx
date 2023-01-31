@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import './requestList.scss'
 import { State } from "../../store/state";
 import { getRequestList } from "../../store/backend.action";
-import { RequestForm } from "../../utils/types";
+import { Comments, RequestForm, User } from "../../utils/types";
 import moment, { MomentInput } from "moment";
 import SearchFilter from "../search/search";
 import { requestFormBody, requestFormHeader } from "../../utils/requestListObj";
@@ -49,7 +49,7 @@ export default function RequestList() {
     naviagate('/requestForm', { state: { details: req } })
   }
 
-  const isDate = (date: string | number | Date | boolean) => {
+  const isDate = (date: string | number | Date | boolean | User) => {
     return moment(date as MomentInput, moment.ISO_8601, true).isValid();
   }
 
@@ -87,10 +87,12 @@ export default function RequestList() {
                 <div className="container">
                   <div className="row">
                     {
-                      Object.entries(requestFormHeader).map(([key, val]) => {
-                        return <Typography key={key} className="col-md-2 col-sm-4 col-6">
-                          {val}: {req[(key as keyof RequestForm)]}
-                        </Typography>
+                      Object.entries(requestFormHeader).map(([key, val], q) => {
+                        return <>
+                          <div key={q} className="col-md-2 col-sm-4 col-6">
+                            <span>{val}:</span><span>{req[key as keyof RequestForm] as string}</span>
+                          </div>
+                        </>
                       })
                     }
                     <div className="col-md-2 col-sm-12 col-12 ">
@@ -108,17 +110,56 @@ export default function RequestList() {
                 <div className="container">
                   <form className="row">
                     {
-                      Object.entries(requestFormBody).map(([k, v], i) => {
+                      Object.entries(requestFormBody).map(([k, v], j) => {
                         const value = req[k as keyof RequestForm];
                         return (
-                          <div className={` form-group ${k === 'comments' ? 'col-sm-12 col-md-12 col-12' : 'col-sm-2 col-md-2  col-6'} `}
-                            key={i}>
-                            <label className="control-label fw-bold">{v}</label>
-                            <p className="form-control-static">{
-                              !Array.isArray(value) && !isDate(value) ?
-                                value : Array.isArray(value) ? value.map((v, i) => <span key={i}>{v}</span>) : moment(value as string).format("DD-mm-yyyy")
-                            }</p>
-                          </div>)
+                          (k !== 'comments' && k !== 'enagagementManager') ?
+                            <div className='form-group col-sm-2 col-md-2  col-6'
+                              key={j}>
+                              <label className="control-label fw-bold">{v}</label>
+                              <p className="form-control-static">
+                                {
+                                  !Array.isArray(value) && !isDate(value) ?
+                                    (value as string) :
+                                    Array.isArray(value) ?
+                                      value.map((v, q) => <span key={q}>{v as string}</span>) :
+                                      moment(value as string).format("DD-mm-yyyy")
+                                }
+                              </p>
+                            </div>
+                            : k === 'comments' ?
+                              <div className='form-group col-sm-12 col-md-12 col-12'>
+                                <label className="control-label fw-bold">{v}:</label>
+                                <div className="form-control-static">
+                                    <table className="table">
+                                      <thead>
+                                        <tr>
+                                          <th scope="col">#</th>
+                                          <th scope="col">User</th>
+                                          <th scope="col">Comment</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {
+                                          (value as Comments[]).map((r, z) => {
+                                            return <tr key={z}>
+                                              <th scope="row">{z + 1}</th>
+                                              <td>{(r as Comments).author.first_name}</td>
+                                              <td>{(r as Comments).comment}</td>
+                                            </tr>
+                                          })
+                                        }
+                                      </tbody>
+                                    </table>
+                                </div>
+                              </div>
+                              : <div className='form-group col-sm-2 col-md-2  col-6'key={j}>
+                                <label className="control-label fw-bold">{v}</label>
+                                <p className="form-control-static">{
+                                  (value as User).first_name
+                                }</p>
+                              </div>
+                        )
                       })
                     }
                   </form>
