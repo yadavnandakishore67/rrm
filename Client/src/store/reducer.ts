@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { RequestForm, UserDetails } from '../utils/types';
+import { UserDetails } from '../utils/types';
 import { getRequestedUserProfile, getRequestList, loginUserRequested } from './backend.action';
 import { initialState } from './state';
 

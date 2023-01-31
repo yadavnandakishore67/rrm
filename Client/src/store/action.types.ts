@@ -1,5 +1,6 @@
 export enum BackendActionTypes {
     GetRequestList = 'GET_REQUEST_LIST',
     LoginUser='LOGIN_USER_REQUESTED',
-    GetRequirementDetails='GET_REQUIREMENT_DETAILS'
+    GetRequirementDetails='GET_REQUIREMENT_DETAILS',
+    CreateUserProfile='CREATE_USER_PROFILE'
 };

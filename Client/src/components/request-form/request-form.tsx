@@ -15,37 +15,24 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import React from "react";
 import { Dayjs } from 'dayjs';
 
-interface IFormInput {
-  role: string;
-  accountName: string;
-  engagementManager: string;
-  clientPartner: string;
-  tentativeBillingStartDate: string;
-  daysPassed: number;
-  skillSet: string[];
-  experience: number;
-  costRateCap: number;
-  practiceName: string;
-  subPractice: string;
-  subSubPractice: string;
-  numberOfPositions: number;
-  positionType: string;
-  location: string;
-  requestDateToPractice: string;
-  duration: number;
-  requestDateToHiring: string;
-  daysOpen: string;
-  numberOfPositionsFullFilled: number;
-  numberOfPositionsOffered: string;
-  interviewStatus: string;
-  status: string;
-  clientInterivew: string;
-  comments: string;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { createUserProfile } from "../../store/backend.action";
+import { State } from "../../store/state";
+import { IFormInput } from "../../utils/types";
+
+
 
 const skills = ["Java", "Python", "Javascript", "Angular", "React"];
 
 export default function RequestForm() {
+
+	const dispatch = useDispatch<any>()
+	
+	const userDetails = useSelector((state: State) => state.userDetails);
+
+  React.useEffect(() => {
+    console.log("requestDetails==>",userDetails?._id)
+  }, [userDetails]);
 
   const location = useLocation();
 
@@ -55,11 +42,50 @@ export default function RequestForm() {
     register,
     handleSubmit,
     formState: { errors },
-    control
+    control 
   } = useForm<IFormInput>();
+
+  const registerOptions = {
+    accountName: { required: "account Name is required" },
+    engagementManager: { required: "engagement manager is required" },
+    clientPartner: { required: "client partner is required" },
+    role: { required: "role is required" },
+    daysPassed: { required: "days passed is required" },
+    experience: { required: "experience is required" },
+    costRateCap: { required: "costRateCap is required" },
+    skillSet: { required: "skillSet is required" },
+    practiceName: { required: "practiceName is required" },
+    subPractice: { required: "subPractice is required" },
+    subSubPractice: { required: "subSubPractice is required" },
+    positionType: { required: "positionType is required" },
+    location: { required: "location is required" },
+    duration: { required: "duration is required" },
+    daysOpen: { required: "daysOpen is required" },
+    numberOfPositions: { required: "numberOfPositions is required" },
+    numberOfPositionsFullfilled: { required: "numberOfPositionsFullfilled is required" },
+    numberOfPositionsOffered: { required: "numberOfPositionsOffered is required" },
+    interviewStatus: { required: "interviewStatus is required" },
+    status: { required: "status is required" },
+    tentativeBillingStartDate: { required: "tentativeBillingStartDate is required" },
+    requestDateToPractice: { required: "requestDateToPractice is required" },
+    requestDateToHiring: { required: "requestDateToHiring is required" },
+    clientInterivew: { required: "clientInterivew is required" },
+    comments: { required: "comment is required" },
+  };
 
   function formData(data: IFormInput) {
     console.log(data);
+
+    if(userDetails && userDetails?._id){
+      const requestData:any ={
+        ...data,
+        engagementManager:{_id:userDetails?._id,first_name:userDetails.first_name},
+        comments:[{author:{_id:userDetails?._id,first_name:userDetails.first_name},comment:'sample data'}],
+        createdBy:userDetails?._id
+      }
+      console.log(requestData)
+      dispatch(createUserProfile(requestData))
+    }
   }
 
   const navigate = useNavigate();
@@ -94,14 +120,11 @@ export default function RequestForm() {
               type="text"
               variant="outlined"
               size="small"
-              {...register("accountName", {
-                required: true,
-              })}
-              value={profileDetails?.accountName}
+              {...register("accountName", registerOptions.accountName)}
             />
-            {errors.accountName?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.accountName && errors.accountName.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -109,14 +132,11 @@ export default function RequestForm() {
               label="Enagagement Manager"
               variant="outlined"
               size="small"
-              {...register("engagementManager", {
-                required: true,
-              })}
-              value={profileDetails?.enagagementManager}
+              {...register("engagementManager", registerOptions.engagementManager)}
             />
-            {errors.engagementManager?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.engagementManager && errors.engagementManager.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -124,14 +144,11 @@ export default function RequestForm() {
               type="text"
               variant="outlined"
               size="small"
-              {...register("clientPartner", {
-                required: true,
-              })}
-              value={profileDetails?.clientPartner}
+              {...register("clientPartner", registerOptions.clientPartner)}
             />
-            {errors.clientPartner?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.clientPartner && errors.clientPartner.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -139,20 +156,17 @@ export default function RequestForm() {
               type="text"
               variant="outlined"
               size="small"
-              {...register("role", {
-                required: true,
-              })}
-              value={profileDetails?.role}
+              {...register("role", registerOptions.role)}
             />
-            {errors.role?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.role && errors.role.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <Controller
               control={control}
               name="skillSet"
-              rules={{ required: true }}
+              rules={registerOptions.skillSet}
               render={({ field: { onChange, value } }) => (
                 <Autocomplete
                   multiple
@@ -160,7 +174,6 @@ export default function RequestForm() {
                   limitTags={1}
                   id="skillSet"
                   options={skills}
-                  value={profileDetails.skillSet}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -176,7 +189,9 @@ export default function RequestForm() {
                 />
               )}
             />
-            {errors.skillSet && <p>This field is required</p>}
+            <small className="text-danger">
+              {errors.skillSet && errors.skillSet.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -184,12 +199,11 @@ export default function RequestForm() {
               type="number"
               variant="outlined"
               size="small"
-              {...register("experience", {
-                required: true,
-              })}
-              value={profileDetails?.experience}
+              {...register("experience", registerOptions.experience)}
             />
-            {errors.experience && <p>This field is required</p>}
+            <small className="text-danger">
+              {errors.experience && errors.experience.message}
+            </small>
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -198,14 +212,11 @@ export default function RequestForm() {
               type="text"
               variant="outlined"
               size="small"
-              {...register("practiceName", {
-                required: true,
-              })}
-              value={profileDetails?.practiceName}
+              {...register("practiceName", registerOptions.practiceName)}
             />
-            {errors.practiceName?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.practiceName && errors.practiceName.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -213,14 +224,12 @@ export default function RequestForm() {
               type="text"
               variant="outlined"
               size="small"
-              {...register("subPractice", {
-                required: true,
-              })}
+              {...register("subPractice", registerOptions.subPractice)}
               value={profileDetails?.subPractice}
             />
-            {errors.subPractice?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.subPractice && errors.subPractice.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -228,14 +237,12 @@ export default function RequestForm() {
               type="text"
               variant="outlined"
               size="small"
-              {...register("subSubPractice", {
-                required: true,
-              })}
+              {...register("subSubPractice", registerOptions.subSubPractice)}
               value={profileDetails?.subSubPractice}
             />
-            {errors.subSubPractice?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.subSubPractice && errors.subSubPractice.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -243,14 +250,12 @@ export default function RequestForm() {
               type="number"
               variant="outlined"
               size="small"
-              {...register("numberOfPositions", {
-                required: true,
-              })}
+              {...register("numberOfPositions", registerOptions.numberOfPositions)}
               value={profileDetails?.numberOfPositions}
             />
-            {errors.numberOfPositions?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.numberOfPositions && errors.numberOfPositions.message}
+            </small>
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -259,14 +264,12 @@ export default function RequestForm() {
               type="number"
               variant="outlined"
               size="small"
-              {...register("numberOfPositionsOffered", {
-                required: true,
-              })}
+              {...register("numberOfPositionsOffered", registerOptions.numberOfPositionsOffered)}
               value={profileDetails?.numberOfPositionsOffered}
             />
-            {errors.numberOfPositionsOffered?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.numberOfPositionsOffered && errors.numberOfPositionsOffered.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -274,14 +277,12 @@ export default function RequestForm() {
               type="number"
               variant="outlined"
               size="small"
-              {...register("numberOfPositionsFullFilled", {
-                required: true,
-              })}
+              {...register("numberOfPositionsFullFilled", registerOptions.numberOfPositionsFullfilled)}
               value={profileDetails?.numberOfPositionsFullfilled}
             />
-            {errors.numberOfPositionsFullFilled?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.numberOfPositionsFullFilled && errors.numberOfPositionsFullFilled.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <FormControl fullWidth size="small">
@@ -291,7 +292,7 @@ export default function RequestForm() {
               <Select
                 labelId="demo-simple-select-label"
                 label="Interview status"
-                {...register("interviewStatus", { required: true })}
+                {...register("interviewStatus", registerOptions.interviewStatus)}
                 value={profileDetails?.interviewStatus}
               >
                 <MenuItem value={"selected"}>Selected</MenuItem>
@@ -299,9 +300,9 @@ export default function RequestForm() {
                 <MenuItem value={"scheduled"}>Scheduled</MenuItem>
               </Select>
             </FormControl>
-            {errors.interviewStatus?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.interviewStatus && errors.interviewStatus.message}
+            </small>
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -310,12 +311,12 @@ export default function RequestForm() {
               type="number"
               variant="outlined"
               size="small"
-              {...register("costRateCap", {
-                required: true,
-              })}
+              {...register("costRateCap", registerOptions.costRateCap)}
               value={profileDetails?.costRateCap}
             />
-            {errors.costRateCap && <p>This field is required</p>}
+            <small className="text-danger">
+              {errors.costRateCap && errors.costRateCap.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -326,14 +327,12 @@ export default function RequestForm() {
                   setTentativeBillingStartDate(newValue);
                 }}
                 renderInput={(params) => <TextField {...params}
-                  {...register("tentativeBillingStartDate", {
-                    required: true,
-                  })} />}
+                  {...register("tentativeBillingStartDate", registerOptions.tentativeBillingStartDate)} />}
               />
             </LocalizationProvider>
-            {errors.tentativeBillingStartDate?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.tentativeBillingStartDate && errors.tentativeBillingStartDate.message}
+            </small>
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -342,16 +341,16 @@ export default function RequestForm() {
               <Select
                 labelId="positionType"
                 label="Position type"
-                {...register("positionType", { required: true })}
+                {...register("positionType", registerOptions.positionType)}
                 value={profileDetails?.positionType}
               >
                 <MenuItem value={"billable"}>Billable</MenuItem>
                 <MenuItem value={"buffer"}>Buffer</MenuItem>
               </Select>
             </FormControl>
-            {errors.positionType?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.positionType && errors.positionType.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <FormControl fullWidth className="select-input" size="small">
@@ -359,7 +358,7 @@ export default function RequestForm() {
               <Select
                 labelId="location"
                 label="Location"
-                {...register("location", { required: true })}
+                {...register("location", registerOptions.location)}
                 value={profileDetails?.location}
               >
                 <MenuItem value={"gurugram"}>Gurugram</MenuItem>
@@ -367,9 +366,9 @@ export default function RequestForm() {
                 <MenuItem value={"pune"}>Pune</MenuItem>
               </Select>
             </FormControl>
-            {errors.location?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.location && errors.location.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -380,14 +379,12 @@ export default function RequestForm() {
                   setRequestDateToPractice(newValue);
                 }}
                 renderInput={(params) => <TextField {...params}
-                  {...register("requestDateToPractice", {
-                    required: true,
-                  })} />}
+                  {...register("requestDateToPractice", registerOptions.requestDateToPractice)} />}
               />
             </LocalizationProvider>
-            {errors.requestDateToPractice?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.requestDateToPractice && errors.requestDateToPractice.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -395,12 +392,12 @@ export default function RequestForm() {
               type="text"
               variant="outlined"
               size="small"
-              {...register("duration", {
-                required: true,
-              })}
+              {...register("duration", registerOptions.duration)}
               value={profileDetails?.duration}
             />
-            {errors.duration && <p>This field is required</p>}
+            <small className="text-danger">
+              {errors.duration && errors.duration.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <FormControl fullWidth className="select-input" size="small">
@@ -408,16 +405,16 @@ export default function RequestForm() {
               <Select
                 labelId="status"
                 label="Status"
-                {...register("status", { required: true })}
+                {...register("status", registerOptions.status)}
                 value={profileDetails?.status}
               >
                 <MenuItem value={"open"}>Open</MenuItem>
                 <MenuItem value={"close"}>Close</MenuItem>
               </Select>
             </FormControl>
-            {errors.status?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.status && errors.status.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -425,14 +422,12 @@ export default function RequestForm() {
               type="number"
               variant="outlined"
               size="small"
-              {...register("daysOpen", {
-                required: true,
-              })}
+              {...register("daysOpen", registerOptions.daysOpen)}
               value={profileDetails?.daysOpen}
             />
-            {errors.daysOpen?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.daysOpen && errors.daysOpen.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -440,14 +435,12 @@ export default function RequestForm() {
               type="number"
               variant="outlined"
               size="small"
-              {...register("daysPassed", {
-                required: true,
-              })}
+              {...register("daysPassed", registerOptions.daysPassed)}
               value={profileDetails?.daysPassed}
             />
-            {errors.daysPassed?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.daysPassed && errors.daysPassed.message}
+            </small>
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -459,29 +452,30 @@ export default function RequestForm() {
                   setRequestDateToHiring(newValue);
                 }}
                 renderInput={(params) => <TextField {...params}
-                  {...register("requestDateToHiring", {
-                    required: true,
-                  })}
+                  {...register("requestDateToHiring", registerOptions.requestDateToHiring)}
                 />}
               />
             </LocalizationProvider>
-            {errors.requestDateToPractice?.type === "required" && (
-              <p>This field is required</p>
-            )}
+            <small className="text-danger">
+              {errors.requestDateToHiring && errors.requestDateToHiring.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <FormControl fullWidth className="select-input" size="small">
               <InputLabel id="client-interview">Client interview</InputLabel>
               <Select
                 labelId="client-interview"
-                label="Client interview"
-                {...register("clientInterivew", { required: true })}
-                value={profileDetails?.clientInterivew ? 'yes' : 'no'}
+                label="clientInterivew"
+                {...register("clientInterivew", registerOptions.clientInterivew)}
+                value={profileDetails?.clientInterivew}
               >
                 <MenuItem value={"yes"}>Yes</MenuItem>
                 <MenuItem value={"no"}>No</MenuItem>
               </Select>
             </FormControl>
+            <small className="text-danger">
+              {errors.clientInterivew && errors.clientInterivew.message}
+            </small>
           </div>
           <div className="col-xs-12 col-sm-12 col-md-12 my-2">
             <TextField
@@ -492,9 +486,12 @@ export default function RequestForm() {
               multiline
               rows={4}
               size="small"
-              {...register("comments")}
+              {...register("comments", registerOptions.comments)}
               value={profileDetails?.comments}
             />
+            <small className="text-danger">
+              {errors.comments && errors.comments.message}
+            </small>
           </div>
         </div>
         <div className="text-center">

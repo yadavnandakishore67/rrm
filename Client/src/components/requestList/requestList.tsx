@@ -1,5 +1,6 @@
 import * as React from "react";
 import Accordion from "@mui/material/Accordion";
+import {  useEffect,useState } from "react";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
@@ -20,50 +21,51 @@ import { requestFormBody, requestFormHeader } from "../../utils/requestListObj";
 import { Pagination } from "@mui/material";
 
 export default function RequestList() {
-  const naviagate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch<any>()
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [filteredList, setFilteredList] = React.useState<RequestForm[]>([])
 
-  const userName = useSelector((state: State) => state.userName);
-
+  
   const requestList = useSelector((state: State) => state.requestList);
 
   React.useEffect(() => {
     setFilteredList(requestList)
   }, [requestList]);
 
-
+//to fetch request list
   React.useEffect(() => {
     dispatch(getRequestList())
   }, []);
 
+  //accordian expand and collapse
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setExpanded(isExpanded ? panel : false);
     };
 
+  //navigation reuestForm page
   const navigateToForm = (req?: any) => {
-    naviagate('/requestForm', { state: { details: req } })
+      navigate('/requestForm', { state: { details: req } })
   }
 
   const isDate = (date: string | number | Date | boolean | User) => {
     return moment(date as MomentInput, moment.ISO_8601, true).isValid();
   }
 
-  const [page, setPage] = React.useState(1);
+  //pagination with 10 records on each page
+  const [page, setPage] = useState(1);
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => { setPage(value); };
 
   const currentData = filteredList?.slice((page - 1) * 10, page * 10);
   return (
-
     <div className="container pt-3 mh-600">
       <div className="row pb-2">
         <div className="col-sm-8 col-md-8 col-8">
           <h4 >Request List</h4>
         </div>
         <div className="col-sm-4 col-md-4 col-4">
-          <Button variant="outlined" className="float-end" onClick={navigateToForm} >
+          <Button variant="outlined" className="float-end" onClick={()=>navigateToForm()} >
             Add New Request
           </Button>
         </div>
@@ -156,9 +158,9 @@ export default function RequestList() {
                               </div>
                               : <div className='form-group col-sm-2 col-md-2  col-6' key={j}>
                                 <label className="control-label fw-bold">{v}</label>
-                                <p className="form-control-static">{
+                                {/* <p className="form-control-static">{
                                   (value as User).first_name
-                                }</p>
+                                }</p> */}
                               </div>
                         )
                       })
