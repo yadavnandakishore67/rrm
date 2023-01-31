@@ -23,18 +23,16 @@ export default function RequestList() {
   const naviagate = useNavigate();
   const dispatch = useDispatch<any>()
   const [expanded, setExpanded] = React.useState<string | false>(false);
+  const [filteredList, setFilteredList] = React.useState<RequestForm[]>([])
 
   const userName = useSelector((state: State) => state.userName);
 
   const requestList = useSelector((state: State) => state.requestList);
 
   React.useEffect(() => {
-    console.log(requestList)
+    setFilteredList(requestList)
   }, [requestList]);
 
-  React.useEffect(() => {
-    console.log(userName)
-  }, [userName]);
 
   React.useEffect(() => {
     dispatch(getRequestList())
@@ -56,7 +54,7 @@ export default function RequestList() {
   const [page, setPage] = React.useState(1);
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => { setPage(value); };
 
-  const currentData = requestList.slice((page - 1) * 10, page * 10);
+  const currentData = filteredList?.slice((page - 1) * 10, page * 10);
   return (
 
     <div className="container pt-3 mh-600">
@@ -70,10 +68,13 @@ export default function RequestList() {
           </Button>
         </div>
       </div>
-      <SearchFilter />
+      <SearchFilter
+        filteredList={requestList}
+        setFilteredList={setFilteredList}
+      />
       {
-        currentData ?
-          currentData?.map((req: RequestForm, i: number) => (
+        filteredList ?
+          filteredList?.map((req: RequestForm, i: number) => (
             <Accordion
               key={i}
               expanded={expanded === `panel${i}`}
@@ -131,29 +132,29 @@ export default function RequestList() {
                               <div className='form-group col-sm-12 col-md-12 col-12'>
                                 <label className="control-label fw-bold">{v}:</label>
                                 <div className="form-control-static">
-                                    <table className="table">
-                                      <thead>
-                                        <tr>
-                                          <th scope="col">#</th>
-                                          <th scope="col">User</th>
-                                          <th scope="col">Comment</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {
-                                          (value as Comments[]).map((r, z) => {
-                                            return <tr key={z}>
-                                              <th scope="row">{z + 1}</th>
-                                              <td>{(r as Comments).author.first_name}</td>
-                                              <td>{(r as Comments).comment}</td>
-                                            </tr>
-                                          })
-                                        }
-                                      </tbody>
-                                    </table>
+                                  <table className="table">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">User</th>
+                                        <th scope="col">Comment</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {
+                                        (value as Comments[]).map((r, z) => {
+                                          return <tr key={z}>
+                                            <th scope="row">{z + 1}</th>
+                                            <td>{(r as Comments).author.first_name}</td>
+                                            <td>{(r as Comments).comment}</td>
+                                          </tr>
+                                        })
+                                      }
+                                    </tbody>
+                                  </table>
                                 </div>
                               </div>
-                              : <div className='form-group col-sm-2 col-md-2  col-6'key={j}>
+                              : <div className='form-group col-sm-2 col-md-2  col-6' key={j}>
                                 <label className="control-label fw-bold">{v}</label>
                                 <p className="form-control-static">{
                                   (value as User).first_name
@@ -166,11 +167,16 @@ export default function RequestList() {
 
                 </div>
               </AccordionDetails>
+
             </Accordion>
-          )) : <div className="text-center pt-5">No results found</div>
+
+          )
+          )
+
+          : <div className="text-center pt-5">No results found</div>
       }
       <div className="col-sm-4 col-md-2 col-12 pt-3 float-end">
-        <Pagination count={Math.ceil(requestList.length / 10)} page={page} onChange={handlePageChange} />
+        <Pagination count={Math.ceil(filteredList?.length / 10)} page={page} onChange={handlePageChange} />
       </div>
     </div>
 
