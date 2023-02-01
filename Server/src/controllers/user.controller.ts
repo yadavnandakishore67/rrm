@@ -41,10 +41,10 @@ const getUser = async (req: Request, res: Response) => {
 
     try {
         const { id } = req.params
-        const users = await userModal.find({ _id: id });
+        const user = await userModal.find({ _id: id }).populate('role');
         res
             .status(200)
-            .json({ users: users })
+            .json({ userDetails: user })
     } catch (error) {
         res.send(error);
     }

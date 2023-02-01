@@ -5,13 +5,13 @@ export interface Login {
 }
 
 export interface UserDetails {
-    _id:string,
+    _id: string,
     emp_ID: string,
     first_name: string,
     last_name: string,
     email: string,
     mobile: number,
-    role: string,
+    role: Role,
     group: string,
 }
 
@@ -44,6 +44,15 @@ export interface RequestForm {
     status: string
 }
 
+export interface Role {
+    _id: string,
+    name: Roles
+}
+export enum Roles {
+    admin = 'Admin',
+    hiring = 'Hiring',
+    default = 'Default'
+}
 export interface Comments {
     author: User,
     comment: string,
@@ -54,7 +63,7 @@ export interface User {
     _id: string,
     first_name: string
 }
-   
+
 export interface IFormInput {
     role: string;
     accountName: string;
@@ -81,6 +90,6 @@ export interface IFormInput {
     status: string;
     clientInterivew: string;
     comments: Comments[];
-    createdBy:string
-  }
-  
+    createdBy: string
+}
+

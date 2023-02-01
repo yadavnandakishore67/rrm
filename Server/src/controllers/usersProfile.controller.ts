@@ -62,10 +62,11 @@ const updateUserProfile = async (req: Request, res: Response, next:any) => {
 const deleteUserProfile = async (req: Request, res: Response) => {
     try {
         const {Id} = req.params;
-        const user = await userProfileModal.findOneAndDelete({ _id: Id });
+        await userProfileModal.findOneAndDelete({ _id: Id });
+        const requestList = await userProfileModal.find().populate([{path:'createdBy',select:'first_name'},{path:'enagagementManager',select:'first_name'},{path:'comments.author',select:'first_name'}]);
         res
             .status(200)
-            .json({ user: user })
+            .json({ requestList: requestList })
     } catch (error) {
         res.send(error);
     }

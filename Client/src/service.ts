@@ -6,8 +6,12 @@ export function get(url: string) {
     const uri = baseUrl + url;
     return axios.get(uri);
 }
+export function getById(url: string, id: string) {
+    const uri = baseUrl + url + '/' + id;
+    return axios.get(uri);
+}
 
-export function post(url: string, payload: any) :Promise<AxiosResponse> {
+export function post(url: string, payload: any): Promise<AxiosResponse> {
     const uri = baseUrl + url;
     return axios.post(uri, payload);
 }

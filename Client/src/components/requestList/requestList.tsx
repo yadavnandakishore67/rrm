@@ -1,20 +1,19 @@
 import * as React from "react";
 import Accordion from "@mui/material/Accordion";
-import {  useEffect,useState } from "react";
+import { useState } from "react";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
-import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
-import NotInterestedIcon from '@mui/icons-material/NotInterested';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { useSelector, useDispatch } from "react-redux";
 
 import './requestList.scss'
 import { State } from "../../store/state";
-import { deleteUserProfile, getRequestList } from "../../store/backend.action";
-import { Comments, RequestForm, User } from "../../utils/types";
+import { deleteRequestRequested, getRequestList } from "../../store/backend.action";
+import { Comments, RequestForm, Roles, User } from "../../utils/types";
 import moment, { MomentInput } from "moment";
 import SearchFilter from "../search/search";
 import { requestFormBody, requestFormHeader } from "../../utils/requestListObj";
@@ -26,14 +25,14 @@ export default function RequestList() {
   const [expanded, setExpanded] = React.useState<string | false>(false);
   const [filteredList, setFilteredList] = React.useState<RequestForm[]>([])
 
-  
+  const role = useSelector((state: State) => state.userDetails?.role.name)
   const requestList = useSelector((state: State) => state.requestList);
 
   React.useEffect(() => {
     setFilteredList(requestList)
   }, [requestList]);
 
-//to fetch request list
+  //to fetch request list
   React.useEffect(() => {
     dispatch(getRequestList())
   }, []);
@@ -46,15 +45,15 @@ export default function RequestList() {
 
   //navigation reuestForm page
   const navigateToForm = (req?: any) => {
-      navigate('/requestForm', { state: { details: req } })
+    navigate('/requestForm', { state: { details: req } })
   }
 
   const isDate = (date: string | number | Date | boolean | User) => {
     return moment(date as MomentInput, moment.ISO_8601, true).isValid();
   }
 
-  function deleteRecord(req:any){
-    dispatch(deleteUserProfile(req._id))
+  function deleteRecord(req: any) {
+    dispatch(deleteRequestRequested(req._id))
   }
 
   //pagination with 10 records on each page
@@ -68,18 +67,18 @@ export default function RequestList() {
         <div className="col-sm-8 col-md-8 col-8">
           <h4 >Request List</h4>
         </div>
-        <div className="col-sm-4 col-md-4 col-4">
-          <Button variant="outlined" className="float-end" onClick={()=>navigateToForm()} >
+        {role === Roles.admin && <div className="col-sm-4 col-md-4 col-4">
+          <Button variant="outlined" className="float-end" onClick={() => navigateToForm()} >
             Add New Request
           </Button>
-        </div>
+        </div>}
       </div>
       <SearchFilter
         filteredList={requestList}
         setFilteredList={setFilteredList}
       />
       {
-        filteredList ?
+        filteredList?.length > 0 ?
           filteredList?.map((req: RequestForm, i: number) => (
             <Accordion
               key={i}
@@ -106,9 +105,9 @@ export default function RequestList() {
                       <Button variant="outlined" className="float-end" onClick={() => navigateToForm(req)}>
                         <EditIcon></EditIcon>
                       </Button>
-                      <Button variant="outlined" className="float-end" onClick={() => deleteRecord(req)}>
-                        <NotInterestedIcon></NotInterestedIcon>
-                      </Button>
+                      {role === Roles.admin && <Button variant="outlined" className="float-end" onClick={() => deleteRecord(req)}>
+                        <DeleteOutlinedIcon />
+                      </Button>}
                     </div>
                   </div>
                 </div>
@@ -183,9 +182,9 @@ export default function RequestList() {
 
           : <div className="text-center pt-5">No results found</div>
       }
-      <div className="col-sm-4 col-md-2 col-12 pt-3 float-end">
+      {filteredList?.length > 0 && <div className="col-sm-4 col-md-2 col-12 pt-3 float-end">
         <Pagination count={Math.ceil(filteredList?.length / 10)} page={page} onChange={handlePageChange} />
-      </div>
+      </div>}
     </div>
 
   );
