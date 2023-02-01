@@ -22,9 +22,9 @@ const UserSchema: Schema = new Schema(
             type: Number,
             required: true,
         },
-
         role: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref:'Role',
             required: true,
         },
         group: {

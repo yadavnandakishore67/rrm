@@ -5,7 +5,7 @@ import userModal from "../schemas/user";
 const userLogin = async (req: Request, res: Response): Promise<void> => {
     try {
         const body = req.body;
-        const resp = await userModal.find({ emp_ID: body.emp_ID, password: body.password });
+        const resp = await userModal.find({ emp_ID: body.emp_ID, password: body.password }).populate('role');
         if (resp.length > 0) {
             res
                 .status(200)
@@ -24,7 +24,7 @@ const userLogin = async (req: Request, res: Response): Promise<void> => {
 
 const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const users = await userModal.find();
+        const users = await userModal.find().populate('role');
         res
             .status(200)
             .json({ users: users })
