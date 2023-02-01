@@ -108,6 +108,10 @@ const UserProfileSchema: Schema = new Schema(
         createdBy: {
             type: Schema.Types.ObjectId,
             ref:'User'
+        },
+        updatedBy: {
+            type: Schema.Types.ObjectId,
+            ref:'User'
         }
     },
     { timestamps:true }

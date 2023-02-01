@@ -4,5 +4,6 @@ export enum BackendActionTypes {
     GetRequirementDetails='GET_REQUIREMENT_DETAILS',
     CreateUserProfile='CREATE_USER_PROFILE',
     DeleteUserProfile='DELETE_USER_PROFILE',
-    GetUserDetails='GET_USER_DETAILS'
+    GetUserDetails='GET_USER_DETAILS',
+    UpdateUserProfile='UPDATE_USER_PROFILE'
 };

@@ -12,13 +12,13 @@ import './request-form.scss'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import React from "react";
+import React, { useEffect } from "react";
 import { Dayjs } from 'dayjs';
 
 import { useDispatch, useSelector } from "react-redux";
-import { createUserProfile } from "../../store/backend.action";
+import { createUserProfile, updateUserProfile } from "../../store/backend.action";
 import { State } from "../../store/state";
-import { IFormInput } from "../../utils/types";
+import { Comments, IFormInput } from "../../utils/types";
 
 
 
@@ -36,14 +36,41 @@ export default function RequestForm() {
 
   const location = useLocation();
 
-  const profileDetails = location?.state?.details ? location.state.details : {};
+  const requestDetails = location?.state?.details ? location.state.details : {};
 
-  let {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control 
-  } = useForm<IFormInput>();
+  const { register, handleSubmit, setValue, setError, formState: { errors },control  } = useForm<IFormInput>();
+
+  const fields = [
+    'accountName',
+    'engagementManager',
+    'clientPartner',
+    'role',
+    'daysPassed',
+    'experience',
+    'costRateCap',
+    'skillSet',
+    'practiceName',
+    'subPractice',
+    'subSubPractice',
+    'positionType',
+    'location',
+    'duration', 
+    'daysOpen',
+    'numberOfPositions',
+    'numberOfPositionsFullfilled',
+    'numberOfPositionsOffered',
+    'interviewStatus',
+    'status',
+    'tentativeBillingStartDate',
+    'requestDateToPractice',
+    'requestDateToHiring',
+    'clientInterivew',
+    'newComment'
+  ];
+
+  useEffect(() => {
+    fields.forEach((field:any) => setValue(field, requestDetails[field]));
+}, []);
 
   const registerOptions = {
     accountName: { required: "account Name is required" },
@@ -70,29 +97,36 @@ export default function RequestForm() {
     requestDateToPractice: { required: "requestDateToPractice is required" },
     requestDateToHiring: { required: "requestDateToHiring is required" },
     clientInterivew: { required: "clientInterivew is required" },
-    comments: { required: "comment is required" },
+    newComment: { required: "Comments is required" },
   };
 
   function formData(data: IFormInput) {
     console.log(data);
-
-    if(userDetails && userDetails?._id){
+    if(userDetails && userDetails?._id && !requestDetails.createdBy){
       const requestData:any ={
         ...data,
         engagementManager:{_id:userDetails?._id,first_name:userDetails.first_name},
-        comments:[{author:{_id:userDetails?._id,first_name:userDetails.first_name},comment:data.comments, createdAt: new Date().toLocaleString()}],
-        createdBy:userDetails?._id
+        comments:[{author:{_id:userDetails?._id,first_name:userDetails.first_name},comment:data.newComment, createdAt: new Date().toLocaleString()}],
+        createdBy:userDetails?._id,
+        updatedBy:userDetails?._id
       }
       console.log(requestData)
       dispatch(createUserProfile(requestData))
+    }else{
+      requestDetails.comments.push({author:{_id:userDetails?._id,first_name:userDetails?.first_name},comment:data.newComment, createdAt: new Date().toLocaleString()})
+      const requestData:any ={
+        ...data,
+        engagementManager:{_id:userDetails?._id,first_name:userDetails?.first_name},
+        comments:requestDetails.comments,
+        updatedBy:userDetails?._id
+      }
+      console.log(requestData)
+      dispatch(updateUserProfile({id:requestDetails._id,input:requestData}))
     }
   }
+  
 
   const navigate = useNavigate();
-  const [tentativeBillingStartDate, setTentativeBillingStartDate] = React.useState<Dayjs | null>(null);
-  const [requestDateToPractice, setRequestDateToPractice] = React.useState<Dayjs | null>(null);
-  const [requestDateToHiring, setRequestDateToHiring] = React.useState<Dayjs | null>(null);
-
   
   const routeUrl = () => {
     navigate('/requestList')
@@ -112,7 +146,7 @@ export default function RequestForm() {
         </div>
       </div>
 
-      <form className="container p-4" onSubmit={handleSubmit(formData)}>
+      <form onSubmit={handleSubmit(formData)}>
         <div className="row">
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
             <TextField
@@ -225,7 +259,6 @@ export default function RequestForm() {
               variant="outlined"
               size="small"
               {...register("subPractice", registerOptions.subPractice)}
-              value={profileDetails?.subPractice}
             />
             <small className="text-danger">
               {errors.subPractice && errors.subPractice.message}
@@ -238,7 +271,6 @@ export default function RequestForm() {
               variant="outlined"
               size="small"
               {...register("subSubPractice", registerOptions.subSubPractice)}
-              value={profileDetails?.subSubPractice}
             />
             <small className="text-danger">
               {errors.subSubPractice && errors.subSubPractice.message}
@@ -251,7 +283,6 @@ export default function RequestForm() {
               variant="outlined"
               size="small"
               {...register("numberOfPositions", registerOptions.numberOfPositions)}
-              value={profileDetails?.numberOfPositions}
             />
             <small className="text-danger">
               {errors.numberOfPositions && errors.numberOfPositions.message}
@@ -265,7 +296,6 @@ export default function RequestForm() {
               variant="outlined"
               size="small"
               {...register("numberOfPositionsOffered", registerOptions.numberOfPositionsOffered)}
-              value={profileDetails?.numberOfPositionsOffered}
             />
             <small className="text-danger">
               {errors.numberOfPositionsOffered && errors.numberOfPositionsOffered.message}
@@ -277,11 +307,10 @@ export default function RequestForm() {
               type="number"
               variant="outlined"
               size="small"
-              {...register("numberOfPositionsFullFilled", registerOptions.numberOfPositionsFullfilled)}
-              value={profileDetails?.numberOfPositionsFullfilled}
+              {...register("numberOfPositionsFullfilled", registerOptions.numberOfPositionsFullfilled)}
             />
             <small className="text-danger">
-              {errors.numberOfPositionsFullFilled && errors.numberOfPositionsFullFilled.message}
+              {errors.numberOfPositionsFullfilled && errors.numberOfPositionsFullfilled.message}
             </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -293,7 +322,6 @@ export default function RequestForm() {
                 labelId="demo-simple-select-label"
                 label="Interview status"
                 {...register("interviewStatus", registerOptions.interviewStatus)}
-                value={profileDetails?.interviewStatus}
               >
                 <MenuItem value={"selected"}>Selected</MenuItem>
                 <MenuItem value={"pending"}>Pending</MenuItem>
@@ -312,25 +340,30 @@ export default function RequestForm() {
               variant="outlined"
               size="small"
               {...register("costRateCap", registerOptions.costRateCap)}
-              value={profileDetails?.costRateCap}
             />
             <small className="text-danger">
               {errors.costRateCap && errors.costRateCap.message}
             </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Controller
+              control={control}
+              name="tentativeBillingStartDate"
+              rules={registerOptions.tentativeBillingStartDate}
+              render={({ field: { onChange,value } }) => (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Tentative billing start date"
-                value={tentativeBillingStartDate}
-                onChange={(newValue) => {
-                  setTentativeBillingStartDate(newValue);
-                }}
+                inputFormat="MM/DD/YYYY"
+                value={value}
+                onChange={onChange}
                 renderInput={(params) => <TextField {...params} size="small"
                 {...register("tentativeBillingStartDate", registerOptions.tentativeBillingStartDate)}
                    />}
               />
             </LocalizationProvider>
+              )}
+            />
             <small className="text-danger">
               {errors.tentativeBillingStartDate && errors.tentativeBillingStartDate.message}
             </small>
@@ -343,7 +376,6 @@ export default function RequestForm() {
                 labelId="positionType"
                 label="Position type"
                 {...register("positionType", registerOptions.positionType)}
-                value={profileDetails?.positionType}
               >
                 <MenuItem value={"billable"}>Billable</MenuItem>
                 <MenuItem value={"buffer"}>Buffer</MenuItem>
@@ -360,7 +392,6 @@ export default function RequestForm() {
                 labelId="location"
                 label="Location"
                 {...register("location", registerOptions.location)}
-                value={profileDetails?.location}
               >
                 <MenuItem value={"gurugram"}>Gurugram</MenuItem>
                 <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
@@ -372,17 +403,25 @@ export default function RequestForm() {
             </small>
           </div>
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Controller
+              control={control}
+              name="requestDateToPractice"
+              rules={registerOptions.requestDateToPractice}
+              render={({ field: { onChange,value } }) => (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Request date to practice"
-                value={requestDateToPractice}
-                onChange={(newValue) => {
-                  setRequestDateToPractice(newValue);
-                }}
+                inputFormat="MM/DD/YYYY"
+                value={value}
+                onChange={onChange}
+                
                 renderInput={(params) => <TextField {...params} size="small"
-                  {...register("requestDateToPractice", registerOptions.requestDateToPractice)} />}
+                {...register("requestDateToPractice", registerOptions.requestDateToPractice)}
+                   />}
               />
             </LocalizationProvider>
+              )}
+            />
             <small className="text-danger">
               {errors.requestDateToPractice && errors.requestDateToPractice.message}
             </small>
@@ -394,7 +433,6 @@ export default function RequestForm() {
               variant="outlined"
               size="small"
               {...register("duration", registerOptions.duration)}
-              value={profileDetails?.duration}
             />
             <small className="text-danger">
               {errors.duration && errors.duration.message}
@@ -407,7 +445,6 @@ export default function RequestForm() {
                 labelId="status"
                 label="Status"
                 {...register("status", registerOptions.status)}
-                value={profileDetails?.status}
               >
                 <MenuItem value={"open"}>Open</MenuItem>
                 <MenuItem value={"close"}>Close</MenuItem>
@@ -424,7 +461,6 @@ export default function RequestForm() {
               variant="outlined"
               size="small"
               {...register("daysOpen", registerOptions.daysOpen)}
-              value={profileDetails?.daysOpen}
             />
             <small className="text-danger">
               {errors.daysOpen && errors.daysOpen.message}
@@ -437,7 +473,6 @@ export default function RequestForm() {
               variant="outlined"
               size="small"
               {...register("daysPassed", registerOptions.daysPassed)}
-              value={profileDetails?.daysPassed}
             />
             <small className="text-danger">
               {errors.daysPassed && errors.daysPassed.message}
@@ -445,18 +480,24 @@ export default function RequestForm() {
           </div>
 
           <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Controller
+              control={control}
+              name="requestDateToHiring"
+              rules={registerOptions.requestDateToHiring}
+              render={({ field: { onChange,value } }) => (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                label="Request date to hiring"
-                value={requestDateToHiring}
-                onChange={(newValue) => {
-                  setRequestDateToHiring(newValue);
-                }}
+                label="requestDateToHiring"
+                inputFormat="MM/DD/YYYY"
+                value={value}
+                onChange={onChange}
                 renderInput={(params) => <TextField {...params} size="small"
-                  {...register("requestDateToHiring", registerOptions.requestDateToHiring)}
-                />}
+                {...register("requestDateToHiring", registerOptions.requestDateToHiring)}
+                   />}
               />
             </LocalizationProvider>
+              )}
+            />
             <small className="text-danger">
               {errors.requestDateToHiring && errors.requestDateToHiring.message}
             </small>
@@ -468,7 +509,6 @@ export default function RequestForm() {
                 labelId="client-interview"
                 label="clientInterivew"
                 {...register("clientInterivew", registerOptions.clientInterivew)}
-                value={profileDetails?.clientInterivew}
               >
                 <MenuItem value={"yes"}>Yes</MenuItem>
                 <MenuItem value={"no"}>No</MenuItem>
@@ -478,20 +518,46 @@ export default function RequestForm() {
               {errors.clientInterivew && errors.clientInterivew.message}
             </small>
           </div>
+          <div className='form-group col-sm-12 col-md-12 col-12'>
+                                <label className="control-label fw-bold">comments:</label>
+                                <div className="form-control-static">
+                                  <table className="table">
+                                    <thead>
+                                      <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">User</th>
+                                        <th scope="col">Create Date</th>
+                                        <th scope="col">Comment</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {
+                                        (requestDetails.comments as Comments[])?.map((r, z) => {
+                                          return <tr key={z}>
+                                            <th scope="row">{z + 1}</th>
+                                            <td>{(r as Comments).author.first_name}</td>
+                                            <td>{(r as Comments).createdAt}</td>
+                                            <td>{(r as Comments).comment}</td>
+                                          </tr>
+                                        })
+                                      }
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
           <div className="col-xs-12 col-sm-12 col-md-12 my-2">
             <TextField
               className="w-100"
-              label="Comments"
+              label="Comment"
               type="text"
               variant="outlined"
               multiline
               rows={4}
               size="small"
-              {...register("comments", registerOptions.comments)}
-              value={profileDetails?.comments}
+              {...register("newComment", registerOptions.newComment)}
             />
             <small className="text-danger">
-              {errors.comments && errors.comments.message}
+              {errors.newComment && errors.newComment.message}
             </small>
           </div>
         </div>
@@ -503,4 +569,4 @@ export default function RequestForm() {
       </form>
     </div>
   );
-}
+              }

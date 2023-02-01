@@ -21,7 +21,7 @@ export function deleteItem(url: string, id: string) {
     return axios.delete(uri);
 }
 
-export function put(url: string, id: string) {
+export function put(url: string, id: string,payload:any) {
     const uri = baseUrl + url + '/' + id;
-    return axios.put(uri);
+    return axios.put(uri,payload);
 }

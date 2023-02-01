@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { deleteItem, get, getById, post } from "../service";
+import { deleteItem, get, getById, post, put } from "../service";
 import { IFormInput, Login } from "../utils/types";
 import { BackendActionTypes } from "./action.types";
 
@@ -29,6 +29,13 @@ export const createUserProfile = createAsyncThunk(
     BackendActionTypes.CreateUserProfile, async (input: IFormInput) => {
         const resp = await post(`userProfiles`, input);
         return resp
+    }
+)
+
+export const updateUserProfile = createAsyncThunk(
+    BackendActionTypes.UpdateUserProfile, async (payload:{id:string,input:any}) => {
+        const resp = await put(`userProfiles`,payload.id,payload.input);
+        return resp.data.requestList;
     }
 )
 

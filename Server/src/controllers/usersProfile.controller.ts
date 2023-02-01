@@ -6,7 +6,7 @@ import path from "path";
 
 const getAllUserProfiles = async (req: Request, res: Response) => { 
     try {
-        const requestList = await userProfileModal.find().populate([{path:'createdBy',select:'first_name'},{path:'enagagementManager',select:'first_name'},{path:'comments.author',select:'first_name'}]);
+        const requestList = await userProfileModal.find().populate([{path:'createdBy',select:'first_name'},{path:'updatedBy',select:'first_name'},{path:'enagagementManager',select:'first_name'},{path:'comments.author',select:'first_name'}]);
         res
             .status(200)
             .json({ requestList: requestList })
@@ -50,7 +50,9 @@ const getUserProfile = async (req: Request, res: Response) => {
 const updateUserProfile = async (req: Request, res: Response, next:any) => {
     try {
         const {id} = req.params;
-        const user = await userProfileModal.updateOne({ _id: id }, req.body);
+        console.log(id)
+        console.log(req.body)
+        const user = await userProfileModal.findOneAndUpdate({ _id: id }, req.body);
         res
             .status(200)
             .json({ user: user })

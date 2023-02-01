@@ -7,7 +7,7 @@ import { State } from "../../store/state";
 import './login.scss';
 
 export default function Login() {
-  const [empId, setempId] = useState<string>();
+  const [empId, setempId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const dispatch = useDispatch<any>();
   const userLoggerIn = useSelector((state: State) => state.userLoggedIn);

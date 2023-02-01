@@ -84,12 +84,14 @@ export interface IFormInput {
     duration: number;
     requestDateToHiring: string;
     daysOpen: string;
-    numberOfPositionsFullFilled: number;
+    numberOfPositionsFullfilled: number;
     numberOfPositionsOffered: string;
     interviewStatus: string;
     status: string;
     clientInterivew: string;
     comments: Comments[];
-    createdBy: string
+    createdBy: string;
+    newComment:string;
+    updatedBy:string;
 }
 

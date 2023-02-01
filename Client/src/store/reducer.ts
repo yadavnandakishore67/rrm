@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserDetails } from '../utils/types';
-import { deleteRequestRequested, getRequestList, getUserDataRequested, loginUserRequested } from './backend.action';
+import { deleteRequestRequested, getRequestList, getUserDataRequested, loginUserRequested, updateUserProfile } from './backend.action';
 import { initialState } from './state';
 
 const slice = createSlice({
@@ -26,6 +26,12 @@ const slice = createSlice({
                 userDetails: action.payload,
                 userLoggedIn: true,
                 userName: action.payload.emp_ID
+            }
+        })
+        builder.addCase(updateUserProfile.fulfilled, (state: any, action: { payload: any }) => {
+            return {
+                ...state,
+                requestList: action.payload
             }
         })
         builder.addCase(deleteRequestRequested.fulfilled, (state: any, action: { payload: any }) => {
