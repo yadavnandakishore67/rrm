@@ -61,8 +61,8 @@ const updateUserProfile = async (req: Request, res: Response, next:any) => {
 
 const deleteUserProfile = async (req: Request, res: Response) => {
     try {
-        const {id} = req.params;
-        const user = await userProfileModal.deleteOne({ _id: id });
+        const {Id} = req.params;
+        const user = await userProfileModal.findOneAndDelete({ _id: Id });
         res
             .status(200)
             .json({ user: user })

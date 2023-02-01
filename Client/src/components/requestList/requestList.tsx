@@ -158,9 +158,9 @@ export default function RequestList() {
                               </div>
                               : <div className='form-group col-sm-2 col-md-2  col-6' key={j}>
                                 <label className="control-label fw-bold">{v}</label>
-                                {/* <p className="form-control-static">{
-                                  (value as User).first_name
-                                }</p> */}
+                                <p className="form-control-static">{
+                                  (value as User)?.first_name
+                                }</p>
                               </div>
                         )
                       })
