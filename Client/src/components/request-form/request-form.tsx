@@ -80,7 +80,7 @@ export default function RequestForm() {
       const requestData:any ={
         ...data,
         engagementManager:{_id:userDetails?._id,first_name:userDetails.first_name},
-        comments:[{author:{_id:userDetails?._id,first_name:userDetails.first_name},comment:'sample data'}],
+        comments:[{author:{_id:userDetails?._id,first_name:userDetails.first_name},comment:data.comments}],
         createdBy:userDetails?._id
       }
       console.log(requestData)
@@ -93,7 +93,7 @@ export default function RequestForm() {
   const [requestDateToPractice, setRequestDateToPractice] = React.useState<Dayjs | null>(null);
   const [requestDateToHiring, setRequestDateToHiring] = React.useState<Dayjs | null>(null);
 
-
+  
   const routeUrl = () => {
     navigate('/requestList')
   }
@@ -322,12 +322,13 @@ export default function RequestForm() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Tentative billing start date"
-                value={profileDetails.tentativeBillingStartDate ? profileDetails.tentativeBillingStartDate : tentativeBillingStartDate}
+                value={tentativeBillingStartDate}
                 onChange={(newValue) => {
                   setTentativeBillingStartDate(newValue);
                 }}
-                renderInput={(params) => <TextField {...params}
-                  {...register("tentativeBillingStartDate", registerOptions.tentativeBillingStartDate)} />}
+                renderInput={(params) => <TextField {...params} size="small"
+                {...register("tentativeBillingStartDate", registerOptions.tentativeBillingStartDate)}
+                   />}
               />
             </LocalizationProvider>
             <small className="text-danger">
@@ -374,11 +375,11 @@ export default function RequestForm() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Request date to practice"
-                value={profileDetails.requestDateToPractice ? profileDetails.requestDateToPractice : requestDateToPractice}
+                value={requestDateToPractice}
                 onChange={(newValue) => {
                   setRequestDateToPractice(newValue);
                 }}
-                renderInput={(params) => <TextField {...params}
+                renderInput={(params) => <TextField {...params} size="small"
                   {...register("requestDateToPractice", registerOptions.requestDateToPractice)} />}
               />
             </LocalizationProvider>
@@ -447,11 +448,11 @@ export default function RequestForm() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Request date to hiring"
-                value={profileDetails.requestDateToHiring ? profileDetails.requestDateToHiring : requestDateToHiring}
+                value={requestDateToHiring}
                 onChange={(newValue) => {
                   setRequestDateToHiring(newValue);
                 }}
-                renderInput={(params) => <TextField {...params}
+                renderInput={(params) => <TextField {...params} size="small"
                   {...register("requestDateToHiring", registerOptions.requestDateToHiring)}
                 />}
               />

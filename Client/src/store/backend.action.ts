@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { get, post } from "../service";
+import { deleteItem, get, post } from "../service";
 import { IFormInput, Login } from "../utils/types";
 import { BackendActionTypes } from "./action.types";
 
@@ -28,6 +28,13 @@ export const getRequestedUserProfile = createAsyncThunk(
 export const createUserProfile = createAsyncThunk(
     BackendActionTypes.CreateUserProfile,async(input:IFormInput)=>{
         const resp = await post(`userProfiles`,input);
+        return resp
+    }
+)
+
+export const deleteUserProfile = createAsyncThunk(
+    BackendActionTypes.DeleteUserProfile,async(id:string)=>{
+        const resp = await deleteItem('userProfiles',id);
         return resp
     }
 )

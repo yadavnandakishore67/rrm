@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import './requestList.scss'
 import { State } from "../../store/state";
-import { getRequestList } from "../../store/backend.action";
+import { deleteUserProfile, getRequestList } from "../../store/backend.action";
 import { Comments, RequestForm, User } from "../../utils/types";
 import moment, { MomentInput } from "moment";
 import SearchFilter from "../search/search";
@@ -51,6 +51,10 @@ export default function RequestList() {
 
   const isDate = (date: string | number | Date | boolean | User) => {
     return moment(date as MomentInput, moment.ISO_8601, true).isValid();
+  }
+
+  function deleteRecord(req:any){
+    dispatch(deleteUserProfile(req._id))
   }
 
   //pagination with 10 records on each page
@@ -102,7 +106,7 @@ export default function RequestList() {
                       <Button variant="outlined" className="float-end" onClick={() => navigateToForm(req)}>
                         <EditIcon></EditIcon>
                       </Button>
-                      <Button variant="outlined" className="float-end" onClick={() => navigateToForm(req)}>
+                      <Button variant="outlined" className="float-end" onClick={() => deleteRecord(req)}>
                         <NotInterestedIcon></NotInterestedIcon>
                       </Button>
                     </div>
