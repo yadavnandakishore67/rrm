@@ -100,6 +100,9 @@ const UserProfileSchema: Schema = new Schema(
             },
             comment:{
                 type:String
+            },
+            createdAt: {
+                type:String
             }
         }],
         createdBy: {

@@ -47,6 +47,7 @@ export interface RequestForm {
 export interface Comments {
     author: User,
     comment: string,
+    createdAt: string
 }
 
 export interface User {

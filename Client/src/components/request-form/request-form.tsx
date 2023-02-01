@@ -80,7 +80,7 @@ export default function RequestForm() {
       const requestData:any ={
         ...data,
         engagementManager:{_id:userDetails?._id,first_name:userDetails.first_name},
-        comments:[{author:{_id:userDetails?._id,first_name:userDetails.first_name},comment:data.comments}],
+        comments:[{author:{_id:userDetails?._id,first_name:userDetails.first_name},comment:data.comments, createdAt: new Date().toLocaleString()}],
         createdBy:userDetails?._id
       }
       console.log(requestData)

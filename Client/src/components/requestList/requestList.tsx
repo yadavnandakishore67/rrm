@@ -143,6 +143,7 @@ export default function RequestList() {
                                       <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">User</th>
+                                        <th scope="col">Create Date</th>
                                         <th scope="col">Comment</th>
                                       </tr>
                                     </thead>
@@ -152,6 +153,7 @@ export default function RequestList() {
                                           return <tr key={z}>
                                             <th scope="row">{z + 1}</th>
                                             <td>{(r as Comments).author.first_name}</td>
+                                            <td>{(r as Comments).createdAt}</td>
                                             <td>{(r as Comments).comment}</td>
                                           </tr>
                                         })
