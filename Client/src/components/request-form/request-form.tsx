@@ -18,7 +18,7 @@ import { Dayjs } from 'dayjs';
 import { useDispatch, useSelector } from "react-redux";
 import { createUserProfile, updateUserProfile } from "../../store/backend.action";
 import { State } from "../../store/state";
-import { Comments, IFormInput } from "../../utils/types";
+import { Comments, IFormInput, Roles } from "../../utils/types";
 
 
 
@@ -26,19 +26,21 @@ const skills = ["Java", "Python", "Javascript", "Angular", "React"];
 
 export default function RequestForm() {
 
-	const dispatch = useDispatch<any>()
-	
-	const userDetails = useSelector((state: State) => state.userDetails);
+  const dispatch = useDispatch<any>()
+
+  const userDetails = useSelector((state: State) => state.userDetails);
+
+  const isAdmin = useSelector((state: State) => state.userDetails?.role.name === Roles.admin)
 
   React.useEffect(() => {
-    console.log("requestDetails==>",userDetails?._id)
+    console.log("requestDetails==>", userDetails?._id)
   }, [userDetails]);
 
   const location = useLocation();
 
   const requestDetails = location?.state?.details ? location.state.details : {};
 
-  const { register, handleSubmit, setValue, setError, formState: { errors },control  } = useForm<IFormInput>();
+  const { register, handleSubmit, setValue, setError, formState: { errors }, control } = useForm<IFormInput>();
 
   const fields = [
     'accountName',
@@ -54,7 +56,7 @@ export default function RequestForm() {
     'subSubPractice',
     'positionType',
     'location',
-    'duration', 
+    'duration',
     'daysOpen',
     'numberOfPositions',
     'numberOfPositionsFullfilled',
@@ -69,8 +71,8 @@ export default function RequestForm() {
   ];
 
   useEffect(() => {
-    fields.forEach((field:any) => setValue(field, requestDetails[field]));
-}, []);
+    fields.forEach((field: any) => setValue(field, requestDetails[field]));
+  }, []);
 
   const registerOptions = {
     accountName: { required: "account Name is required" },
@@ -102,471 +104,484 @@ export default function RequestForm() {
 
   function formData(data: IFormInput) {
     console.log(data);
-    if(userDetails && userDetails?._id && !requestDetails.createdBy){
-      const requestData:any ={
+    if (userDetails && userDetails?._id && !requestDetails.createdBy) {
+      const requestData: any = {
         ...data,
-        engagementManager:{_id:userDetails?._id,first_name:userDetails.first_name},
-        comments:[{author:{_id:userDetails?._id,first_name:userDetails.first_name},comment:data.newComment, createdAt: new Date().toLocaleString()}],
-        createdBy:userDetails?._id,
-        updatedBy:userDetails?._id
+        engagementManager: { _id: userDetails?._id, first_name: userDetails.first_name },
+        comments: [{ author: { _id: userDetails?._id, first_name: userDetails.first_name }, comment: data.newComment, createdAt: new Date().toLocaleString() }],
+        createdBy: userDetails?._id,
+        updatedBy: userDetails?._id
       }
       console.log(requestData)
       dispatch(createUserProfile(requestData))
-    }else{
-      requestDetails.comments.push({author:{_id:userDetails?._id,first_name:userDetails?.first_name},comment:data.newComment, createdAt: new Date().toLocaleString()})
-      const requestData:any ={
+    } else {
+      requestDetails.comments.push({ author: { _id: userDetails?._id, first_name: userDetails?.first_name }, comment: data.newComment, createdAt: new Date().toLocaleString() })
+      const requestData: any = {
         ...data,
-        engagementManager:{_id:userDetails?._id,first_name:userDetails?.first_name},
-        comments:requestDetails.comments,
-        updatedBy:userDetails?._id
+        engagementManager: { _id: userDetails?._id, first_name: userDetails?.first_name },
+        comments: requestDetails.comments,
+        updatedBy: userDetails?._id
       }
       console.log(requestData)
-      dispatch(updateUserProfile({id:requestDetails._id,input:requestData}))
+      dispatch(updateUserProfile({ id: requestDetails._id, input: requestData }))
     }
   }
-  
+
 
   const navigate = useNavigate();
-  
+
   const routeUrl = () => {
     navigate('/requestList')
   }
   return (
-    <div className="card bg-white shadow-lg text-black">
+    <div className="container">
       <div className="container pt-3">
         <div className="row pb-2">
-          <div className="col-sm-8 col-md-8 col-8">
+          <div className="col-sm-8 col-md-8 col-8 p-0">
             <h4 >Request Form</h4>
           </div>
-          <div className="col-sm-4 col-md-4 col-4 text-end">
+          <div className="col-sm-4 col-md-4 col-4 text-end p-0">
             <Button variant="outlined" onClick={routeUrl} >
               Back
             </Button>
           </div>
         </div>
       </div>
+      <div className="card bg-white shadow-lg text-black p-3 mb-3">
 
-      <form onSubmit={handleSubmit(formData)}>
-        <div className="row">
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Account Name"
-              type="text"
-              variant="outlined"
-              size="small"
-              {...register("accountName", registerOptions.accountName)}
-            />
-            <small className="text-danger">
-              {errors.accountName && errors.accountName.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              type="text"
-              label="Enagagement Manager"
-              variant="outlined"
-              size="small"
-              {...register("engagementManager", registerOptions.engagementManager)}
-            />
-            <small className="text-danger">
-              {errors.engagementManager && errors.engagementManager.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Client Partner"
-              type="text"
-              variant="outlined"
-              size="small"
-              {...register("clientPartner", registerOptions.clientPartner)}
-            />
-            <small className="text-danger">
-              {errors.clientPartner && errors.clientPartner.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Role"
-              type="text"
-              variant="outlined"
-              size="small"
-              {...register("role", registerOptions.role)}
-            />
-            <small className="text-danger">
-              {errors.role && errors.role.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <Controller
-              control={control}
-              name="skillSet"
-              rules={registerOptions.skillSet}
-              render={({ field: { onChange, value } }) => (
-                <Autocomplete
-                  multiple
-                  freeSolo
-                  limitTags={1}
-                  id="skillSet"
-                  options={skills}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      size="small"
-                      label="Skill set"
+
+        <form onSubmit={handleSubmit(formData)} className="container pb-3">
+          <div className="row">
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                type="text"
+                label="Enagagement Manager"
+                variant="outlined"
+                size="small"
+                {...register("engagementManager", registerOptions.engagementManager)}
+                disabled
+              />
+              <small className="text-danger">
+                {errors.engagementManager && errors.engagementManager.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Account Name"
+                type="text"
+                variant="outlined"
+                size="small"
+                {...register("accountName", registerOptions.accountName)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+              />
+              <small className="text-danger">
+                {errors.accountName && errors.accountName.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Client Partner"
+                type="text"
+                variant="outlined"
+                size="small"
+                {...register("clientPartner", registerOptions.clientPartner)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+              />
+              <small className="text-danger">
+                {errors.clientPartner && errors.clientPartner.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Practice name"
+                type="text"
+                variant="outlined"
+                size="small"
+                {...register("practiceName", registerOptions.practiceName)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+              />
+              <small className="text-danger">
+                {errors.practiceName && errors.practiceName.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Sub practice name"
+                type="text"
+                variant="outlined"
+                size="small"
+                {...register("subPractice", registerOptions.subPractice)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+              />
+              <small className="text-danger">
+                {errors.subPractice && errors.subPractice.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Sub sub practice name"
+                type="text"
+                variant="outlined"
+                size="small"
+                {...register("subSubPractice", registerOptions.subSubPractice)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+              />
+              <small className="text-danger">
+                {errors.subSubPractice && errors.subSubPractice.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <FormControl fullWidth className="select-input" size="small">
+                <InputLabel id="positionType">Position type</InputLabel>
+                <Select
+                  labelId="positionType"
+                  label="Position type"
+                  {...register("positionType", registerOptions.positionType)}
+                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                >
+                  <MenuItem value={"billable"}>Billable</MenuItem>
+                  <MenuItem value={"buffer"}>Buffer</MenuItem>
+                  <MenuItem value={"contractor"}>Contractor</MenuItem>
+                </Select>
+              </FormControl>
+              <small className="text-danger">
+                {errors.positionType && errors.positionType.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Duration"
+                type="number"
+                variant="outlined"
+                size="small"
+                {...register("duration", registerOptions.duration)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+              />
+              <small className="text-danger">
+                {errors.duration && errors.duration.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Cost rate cap"
+                type="number"
+                variant="outlined"
+                size="small"
+                {...register("costRateCap", registerOptions.costRateCap)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+              />
+              <small className="text-danger">
+                {errors.costRateCap && errors.costRateCap.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <Controller
+                control={control}
+                name="tentativeBillingStartDate"
+                rules={registerOptions.tentativeBillingStartDate}
+                render={({ field: { onChange, value } }) => (
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Tentative billing start date"
+                      inputFormat="MM/DD/YYYY"
+                      value={value}
+                      onChange={onChange}
+                      renderInput={(params) => <TextField {...params} size="small"
+                        {...register("tentativeBillingStartDate", registerOptions.tentativeBillingStartDate)}
+                        disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                      />}
                     />
-                  )}
-                  onChange={(_, data) => {
-                    onChange(data);
-                    return data;
-                  }}
-                />
-              )}
-            />
-            <small className="text-danger">
-              {errors.skillSet && errors.skillSet.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Experience"
-              type="number"
-              variant="outlined"
-              size="small"
-              {...register("experience", registerOptions.experience)}
-            />
-            <small className="text-danger">
-              {errors.experience && errors.experience.message}
-            </small>
-          </div>
-
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Practice name"
-              type="text"
-              variant="outlined"
-              size="small"
-              {...register("practiceName", registerOptions.practiceName)}
-            />
-            <small className="text-danger">
-              {errors.practiceName && errors.practiceName.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Sub practice name"
-              type="text"
-              variant="outlined"
-              size="small"
-              {...register("subPractice", registerOptions.subPractice)}
-            />
-            <small className="text-danger">
-              {errors.subPractice && errors.subPractice.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Sub sub practice name"
-              type="text"
-              variant="outlined"
-              size="small"
-              {...register("subSubPractice", registerOptions.subSubPractice)}
-            />
-            <small className="text-danger">
-              {errors.subSubPractice && errors.subSubPractice.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Number of positions"
-              type="number"
-              variant="outlined"
-              size="small"
-              {...register("numberOfPositions", registerOptions.numberOfPositions)}
-            />
-            <small className="text-danger">
-              {errors.numberOfPositions && errors.numberOfPositions.message}
-            </small>
-          </div>
-
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Number of positions offered"
-              type="number"
-              variant="outlined"
-              size="small"
-              {...register("numberOfPositionsOffered", registerOptions.numberOfPositionsOffered)}
-            />
-            <small className="text-danger">
-              {errors.numberOfPositionsOffered && errors.numberOfPositionsOffered.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Number of positions full filled"
-              type="number"
-              variant="outlined"
-              size="small"
-              {...register("numberOfPositionsFullfilled", registerOptions.numberOfPositionsFullfilled)}
-            />
-            <small className="text-danger">
-              {errors.numberOfPositionsFullfilled && errors.numberOfPositionsFullfilled.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <FormControl fullWidth size="small">
-              <InputLabel id="demo-simple-select-label">
-                Interview status
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                label="Interview status"
-                {...register("interviewStatus", registerOptions.interviewStatus)}
-              >
-                <MenuItem value={"selected"}>Selected</MenuItem>
-                <MenuItem value={"pending"}>Pending</MenuItem>
-                <MenuItem value={"scheduled"}>Scheduled</MenuItem>
-              </Select>
-            </FormControl>
-            <small className="text-danger">
-              {errors.interviewStatus && errors.interviewStatus.message}
-            </small>
-          </div>
-
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Cost rate cap"
-              type="number"
-              variant="outlined"
-              size="small"
-              {...register("costRateCap", registerOptions.costRateCap)}
-            />
-            <small className="text-danger">
-              {errors.costRateCap && errors.costRateCap.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-          <Controller
-              control={control}
-              name="tentativeBillingStartDate"
-              rules={registerOptions.tentativeBillingStartDate}
-              render={({ field: { onChange,value } }) => (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Tentative billing start date"
-                inputFormat="MM/DD/YYYY"
-                value={value}
-                onChange={onChange}
-                renderInput={(params) => <TextField {...params} size="small"
-                {...register("tentativeBillingStartDate", registerOptions.tentativeBillingStartDate)}
-                   />}
+                  </LocalizationProvider>
+                )}
               />
-            </LocalizationProvider>
-              )}
-            />
-            <small className="text-danger">
-              {errors.tentativeBillingStartDate && errors.tentativeBillingStartDate.message}
-            </small>
-          </div>
-
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <FormControl fullWidth className="select-input" size="small">
-              <InputLabel id="positionType">Position type</InputLabel>
-              <Select
-                labelId="positionType"
-                label="Position type"
-                {...register("positionType", registerOptions.positionType)}
-              >
-                <MenuItem value={"billable"}>Billable</MenuItem>
-                <MenuItem value={"buffer"}>Buffer</MenuItem>
-              </Select>
-            </FormControl>
-            <small className="text-danger">
-              {errors.positionType && errors.positionType.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <FormControl fullWidth className="select-input" size="small">
-              <InputLabel id="location">Location</InputLabel>
-              <Select
-                labelId="location"
-                label="Location"
-                {...register("location", registerOptions.location)}
-              >
-                <MenuItem value={"gurugram"}>Gurugram</MenuItem>
-                <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
-                <MenuItem value={"pune"}>Pune</MenuItem>
-              </Select>
-            </FormControl>
-            <small className="text-danger">
-              {errors.location && errors.location.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-          <Controller
-              control={control}
-              name="requestDateToPractice"
-              rules={registerOptions.requestDateToPractice}
-              render={({ field: { onChange,value } }) => (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Request date to practice"
-                inputFormat="MM/DD/YYYY"
-                value={value}
-                onChange={onChange}
-                
-                renderInput={(params) => <TextField {...params} size="small"
-                {...register("requestDateToPractice", registerOptions.requestDateToPractice)}
-                   />}
+              <small className="text-danger">
+                {errors.tentativeBillingStartDate && errors.tentativeBillingStartDate.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Number of positions"
+                type="number"
+                variant="outlined"
+                size="small"
+                {...register("numberOfPositions", registerOptions.numberOfPositions)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
               />
-            </LocalizationProvider>
-              )}
-            />
-            <small className="text-danger">
-              {errors.requestDateToPractice && errors.requestDateToPractice.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Duration"
-              type="text"
-              variant="outlined"
-              size="small"
-              {...register("duration", registerOptions.duration)}
-            />
-            <small className="text-danger">
-              {errors.duration && errors.duration.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <FormControl fullWidth className="select-input" size="small">
-              <InputLabel id="status">Status</InputLabel>
-              <Select
-                labelId="status"
-                label="Status"
-                {...register("status", registerOptions.status)}
-              >
-                <MenuItem value={"open"}>Open</MenuItem>
-                <MenuItem value={"close"}>Close</MenuItem>
-              </Select>
-            </FormControl>
-            <small className="text-danger">
-              {errors.status && errors.status.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Days open"
-              type="number"
-              variant="outlined"
-              size="small"
-              {...register("daysOpen", registerOptions.daysOpen)}
-            />
-            <small className="text-danger">
-              {errors.daysOpen && errors.daysOpen.message}
-            </small>
-          </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <TextField
-              label="Days passed"
-              type="number"
-              variant="outlined"
-              size="small"
-              {...register("daysPassed", registerOptions.daysPassed)}
-            />
-            <small className="text-danger">
-              {errors.daysPassed && errors.daysPassed.message}
-            </small>
-          </div>
+              <small className="text-danger">
+                {errors.numberOfPositions && errors.numberOfPositions.message}
+              </small>
+            </div>
 
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-          <Controller
-              control={control}
-              name="requestDateToHiring"
-              rules={registerOptions.requestDateToHiring}
-              render={({ field: { onChange,value } }) => (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="requestDateToHiring"
-                inputFormat="MM/DD/YYYY"
-                value={value}
-                onChange={onChange}
-                renderInput={(params) => <TextField {...params} size="small"
-                {...register("requestDateToHiring", registerOptions.requestDateToHiring)}
-                   />}
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Role"
+                type="text"
+                variant="outlined"
+                size="small"
+                {...register("role", registerOptions.role)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
               />
-            </LocalizationProvider>
-              )}
-            />
-            <small className="text-danger">
-              {errors.requestDateToHiring && errors.requestDateToHiring.message}
-            </small>
+              <small className="text-danger">
+                {errors.role && errors.role.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <FormControl fullWidth className="select-input" size="small">
+                <InputLabel id="location">Location</InputLabel>
+                <Select
+                  labelId="location"
+                  label="Location"
+                  {...register("location", registerOptions.location)}
+                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                >
+                  <MenuItem value={"gurugram"}>Gurugram</MenuItem>
+                  <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
+                  <MenuItem value={"pune"}>Pune</MenuItem>
+                  <MenuItem value={"any"}>any</MenuItem>
+                </Select>
+              </FormControl>
+              <small className="text-danger">
+                {errors.location && errors.location.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Experience"
+                type="number"
+                variant="outlined"
+                size="small"
+                {...register("experience", registerOptions.experience)}
+                disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+              />
+              <small className="text-danger">
+                {errors.experience && errors.experience.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <Controller
+                control={control}
+                name="skillSet"
+                rules={registerOptions.skillSet}
+                render={({ field: { onChange, value } }) => (
+                  <Autocomplete
+                    multiple
+                    freeSolo
+                    limitTags={1}
+                    id="skillSet"
+                    options={skills}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        size="small"
+                        label="Skill set"
+                      />
+                    )}
+                    disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                    onChange={(_, data) => {
+                      onChange(data);
+                      return data;
+                    }}
+                  />
+                )}
+              />
+              <small className="text-danger">
+                {errors.skillSet && errors.skillSet.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <FormControl fullWidth className="select-input" size="small">
+                <InputLabel id="client-interview">Client interview</InputLabel>
+                <Select
+                  labelId="client-interview"
+                  label="clientInterivew"
+                  {...register("clientInterivew", registerOptions.clientInterivew)}
+                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                >
+                  <MenuItem value={"yes"}>Yes</MenuItem>
+                  <MenuItem value={"no"}>No</MenuItem>
+                </Select>
+              </FormControl>
+              <small className="text-danger">
+                {errors.clientInterivew && errors.clientInterivew.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <Controller
+                control={control}
+                name="requestDateToPractice"
+                rules={registerOptions.requestDateToPractice}
+                render={({ field: { onChange, value } }) => (
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Request date to practice"
+                      inputFormat="MM/DD/YYYY"
+                      value={value}
+                      onChange={onChange}
+
+                      renderInput={(params) => <TextField {...params} size="small"
+                        {...register("requestDateToPractice", registerOptions.requestDateToPractice)}
+                        disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                      />}
+                    />
+                  </LocalizationProvider>
+                )}
+              />
+              <small className="text-danger">
+                {errors.requestDateToPractice && errors.requestDateToPractice.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <Controller
+                control={control}
+                name="requestDateToHiring"
+                rules={registerOptions.requestDateToHiring}
+                render={({ field: { onChange, value } }) => (
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="requestDateToHiring"
+                      inputFormat="MM/DD/YYYY"
+                      value={value}
+                      onChange={onChange}
+                      renderInput={(params) => <TextField {...params} size="small"
+                        {...register("requestDateToHiring", registerOptions.requestDateToHiring)}
+                        disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                      />}
+                    />
+                  </LocalizationProvider>
+                )}
+              />
+              <small className="text-danger">
+                {errors.requestDateToHiring && errors.requestDateToHiring.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Days open"
+                type="number"
+                variant="outlined"
+                size="small"
+                {...register("daysOpen", registerOptions.daysOpen)}
+              />
+              <small className="text-danger">
+                {errors.daysOpen && errors.daysOpen.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Number of positions offered"
+                type="number"
+                variant="outlined"
+                size="small"
+                {...register("numberOfPositionsOffered", registerOptions.numberOfPositionsOffered)}
+              />
+              <small className="text-danger">
+                {errors.numberOfPositionsOffered && errors.numberOfPositionsOffered.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <TextField
+                label="Number of positions full filled"
+                type="number"
+                variant="outlined"
+                size="small"
+                {...register("numberOfPositionsFullfilled", registerOptions.numberOfPositionsFullfilled)}
+              />
+              <small className="text-danger">
+                {errors.numberOfPositionsFullfilled && errors.numberOfPositionsFullfilled.message}
+              </small>
+            </div>
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <FormControl fullWidth size="small">
+                <InputLabel id="demo-simple-select-label">
+                  Interview status
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  label="Interview status"
+                  {...register("interviewStatus", registerOptions.interviewStatus)}
+                >
+                  <MenuItem value={"selected"}>Selected</MenuItem>
+                  <MenuItem value={"pending"}>Pending</MenuItem>
+                  <MenuItem value={"scheduled"}>Scheduled</MenuItem>
+                </Select>
+              </FormControl>
+              <small className="text-danger">
+                {errors.interviewStatus && errors.interviewStatus.message}
+              </small>
+            </div>
+
+
+            <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <FormControl fullWidth className="select-input" size="small">
+                <InputLabel id="status">Status</InputLabel>
+                <Select
+                  labelId="status"
+                  label="Status"
+                  {...register("status", registerOptions.status)}
+                >
+                  <MenuItem value={"open"}>Open</MenuItem>
+                  <MenuItem value={"inprogress"}>Inprogress</MenuItem>
+                  <MenuItem value={"close"}>Close</MenuItem>
+                </Select>
+              </FormControl>
+              <small className="text-danger">
+                {errors.status && errors.status.message}
+              </small>
+            </div>
+
+
+            {Object.keys(requestDetails).length !== 0 && <div className='form-group col-sm-12 col-md-12 col-12'>
+              <label className="control-label fw-bold">comments:</label>
+              <div className="form-control-static">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">User</th>
+                      <th scope="col">Create Date</th>
+                      <th scope="col">Comment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      (requestDetails.comments as Comments[])?.map((r, z) => {
+                        return <tr key={z}>
+                          <th scope="row">{z + 1}</th>
+                          <td>{(r as Comments).author.first_name}</td>
+                          <td>{(r as Comments).createdAt}</td>
+                          <td>{(r as Comments).comment}</td>
+                        </tr>
+                      })
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>}
+            <div className="col-xs-12 col-sm-12 col-md-12 my-2">
+              <TextField
+                className="w-100"
+                label="Comment"
+                type="text"
+                variant="outlined"
+                multiline
+                rows={4}
+                size="small"
+                {...register("newComment", registerOptions.newComment)}
+              />
+              <small className="text-danger">
+                {errors.newComment && errors.newComment.message}
+              </small>
+            </div>
           </div>
-          <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-            <FormControl fullWidth className="select-input" size="small">
-              <InputLabel id="client-interview">Client interview</InputLabel>
-              <Select
-                labelId="client-interview"
-                label="clientInterivew"
-                {...register("clientInterivew", registerOptions.clientInterivew)}
-              >
-                <MenuItem value={"yes"}>Yes</MenuItem>
-                <MenuItem value={"no"}>No</MenuItem>
-              </Select>
-            </FormControl>
-            <small className="text-danger">
-              {errors.clientInterivew && errors.clientInterivew.message}
-            </small>
+          <div className="text-center">
+            <Button variant="contained" type="submit">
+              Submit
+            </Button>
           </div>
-          <div className='form-group col-sm-12 col-md-12 col-12'>
-                                <label className="control-label fw-bold">comments:</label>
-                                <div className="form-control-static">
-                                  <table className="table">
-                                    <thead>
-                                      <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">User</th>
-                                        <th scope="col">Create Date</th>
-                                        <th scope="col">Comment</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {
-                                        (requestDetails.comments as Comments[])?.map((r, z) => {
-                                          return <tr key={z}>
-                                            <th scope="row">{z + 1}</th>
-                                            <td>{(r as Comments).author.first_name}</td>
-                                            <td>{(r as Comments).createdAt}</td>
-                                            <td>{(r as Comments).comment}</td>
-                                          </tr>
-                                        })
-                                      }
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </div>
-          <div className="col-xs-12 col-sm-12 col-md-12 my-2">
-            <TextField
-              className="w-100"
-              label="Comment"
-              type="text"
-              variant="outlined"
-              multiline
-              rows={4}
-              size="small"
-              {...register("newComment", registerOptions.newComment)}
-            />
-            <small className="text-danger">
-              {errors.newComment && errors.newComment.message}
-            </small>
-          </div>
-        </div>
-        <div className="text-center">
-          <Button variant="contained" type="submit">
-            Submit
-          </Button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
+
   );
-              }
+}

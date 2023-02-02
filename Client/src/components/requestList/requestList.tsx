@@ -95,8 +95,11 @@ export default function RequestList() {
                     {
                       Object.entries(requestFormHeader).map(([key, val], q) => {
                         return <>
+
                           <div key={q} className="col-md-2 col-sm-4 col-6">
-                            <span>{val}:</span><span>{req[key as keyof RequestForm] as string}</span>
+                            {key !== 'daysOpen' && key !== 'numberOfPositionsFullfilled' && <> <span>{val}:</span><span>{req[key as keyof RequestForm] as string}</span></>}
+                            {key === 'daysOpen' && req.status !== 'closed' && <><span>{val}:</span><span>{daysBetween(req.createdAt as string)}</span></>}
+                            {key === 'numberOfPositionsFullfilled' && <> <span>{val}:</span><span>{req.numberOfPositions - req.numberOfPositionsOffered}</span></>}
                           </div>
                         </>
                       })
@@ -188,4 +191,18 @@ export default function RequestList() {
     </div>
 
   );
+}
+
+function daysBetween(startDate: string) {
+  // The number of milliseconds in all UTC days (no DST)
+  const date1 = new Date(startDate);
+  const date2 = new Date();
+  const oneDay = 1000 * 60 * 60 * 24;
+
+  // A day in UTC always lasts 24 hours (unlike in other time formats)
+  const start = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+  const end = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+  // so it's safe to divide by 24 hours
+  return (end - start) / oneDay;
 }

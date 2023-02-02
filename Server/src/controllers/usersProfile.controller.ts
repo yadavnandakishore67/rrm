@@ -50,8 +50,6 @@ const getUserProfile = async (req: Request, res: Response) => {
 const updateUserProfile = async (req: Request, res: Response, next:any) => {
     try {
         const {id} = req.params;
-        console.log(id)
-        console.log(req.body)
         const user = await userProfileModal.findOneAndUpdate({ _id: id }, req.body);
         res
             .status(200)
