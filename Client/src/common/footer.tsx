@@ -1,7 +1,7 @@
-function Footer() {
+export default function Footer() {
   return (
-    <div className="container-fluid">
-      <div className="bg-dark text-white row">
+    <div className="container-fluid bg-dark d-block">
+      <div className=" text-white row ">
         <div className="nav-link text-center col-xs-12">Other Links</div>
         <div className="col-xs-12">
           <div className="container">
@@ -42,5 +42,3 @@ function Footer() {
     </div>
   );
 }
-
-export default Footer;
