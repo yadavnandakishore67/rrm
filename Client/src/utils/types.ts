@@ -26,7 +26,7 @@ export interface RequestForm {
     createdAt: string,
     daysOpen: number
     daysPassed: string,
-    enagagementManager: User,
+    engagementManager: User,
     experience: number,
     interviewStatus: string,
     location: string,

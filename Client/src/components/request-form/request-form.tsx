@@ -26,6 +26,8 @@ const skills = ["Java", "Python", "Javascript", "Angular", "React"];
 
 export default function RequestForm() {
 
+  let updatedRequestData = {}
+
   const dispatch = useDispatch<any>()
 
   const userDetails = useSelector((state: State) => state.userDetails);
@@ -39,6 +41,15 @@ export default function RequestForm() {
   const location = useLocation();
 
   const requestDetails = location?.state?.details ? location.state.details : {};
+
+  if (Object.keys(requestDetails).length > 0) {
+    updatedRequestData = {
+      ...requestDetails,
+      engagementManager: userDetails?.first_name,
+      skillSet: 'JavaScript',
+      clientInterivew: requestDetails.clientInterivew ? 'yes' : 'no'
+    }
+  }
 
   const { register, handleSubmit, setValue, setError, formState: { errors }, control } = useForm<IFormInput>();
 
@@ -71,12 +82,12 @@ export default function RequestForm() {
   ];
 
   useEffect(() => {
-    fields.forEach((field: any) => setValue(field, requestDetails[field]));
+    const data = updatedRequestData ? updatedRequestData : requestDetails
+    fields.forEach((field: any) => setValue(field, data[field]));
   }, []);
 
   const registerOptions = {
     accountName: { required: "account Name is required" },
-    engagementManager: { required: "engagement manager is required" },
     clientPartner: { required: "client partner is required" },
     role: { required: "role is required" },
     daysPassed: { required: "days passed is required" },
@@ -158,7 +169,7 @@ export default function RequestForm() {
                 label="Enagagement Manager"
                 variant="outlined"
                 size="small"
-                {...register("engagementManager", registerOptions.engagementManager)}
+                {...register("engagementManager")}
                 disabled
               />
               <small className="text-danger">
@@ -231,19 +242,24 @@ export default function RequestForm() {
               </small>
             </div>
             <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-              <FormControl fullWidth className="select-input" size="small">
-                <InputLabel id="positionType">Position type</InputLabel>
-                <Select
-                  labelId="positionType"
-                  label="Position type"
-                  {...register("positionType", registerOptions.positionType)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
-                >
-                  <MenuItem value={"billable"}>Billable</MenuItem>
-                  <MenuItem value={"buffer"}>Buffer</MenuItem>
-                  <MenuItem value={"contractor"}>Contractor</MenuItem>
-                </Select>
-              </FormControl>
+            <FormControl fullWidth size="small">
+              <InputLabel id="positionType">Position type</InputLabel>
+              <Controller
+                name="positionType"
+                defaultValue=''
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    labelId="positionType"
+                    label="Position type"
+                  >
+                    <MenuItem value={"billable"}>Billable</MenuItem>
+                    <MenuItem value={"buffer"}>Buffer</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
               <small className="text-danger">
                 {errors.positionType && errors.positionType.message}
               </small>
@@ -326,20 +342,25 @@ export default function RequestForm() {
               </small>
             </div>
             <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-              <FormControl fullWidth className="select-input" size="small">
-                <InputLabel id="location">Location</InputLabel>
-                <Select
-                  labelId="location"
-                  label="Location"
-                  {...register("location", registerOptions.location)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
-                >
-                  <MenuItem value={"gurugram"}>Gurugram</MenuItem>
-                  <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
-                  <MenuItem value={"pune"}>Pune</MenuItem>
-                  <MenuItem value={"any"}>any</MenuItem>
-                </Select>
-              </FormControl>
+            <FormControl fullWidth size="small">
+              <InputLabel id="status">Location</InputLabel>
+              <Controller
+                name="location"
+                defaultValue=''
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    labelId="status"
+                    label="Status"
+                  >
+                    <MenuItem value={"gurugram"}>Gurugram</MenuItem>
+                    <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
+                    <MenuItem value={"pune"}>Pune</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
               <small className="text-danger">
                 {errors.location && errors.location.message}
               </small>
@@ -390,18 +411,24 @@ export default function RequestForm() {
               </small>
             </div>
             <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-              <FormControl fullWidth className="select-input" size="small">
-                <InputLabel id="client-interview">Client interview</InputLabel>
-                <Select
-                  labelId="client-interview"
-                  label="clientInterivew"
-                  {...register("clientInterivew", registerOptions.clientInterivew)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
-                >
-                  <MenuItem value={"yes"}>Yes</MenuItem>
-                  <MenuItem value={"no"}>No</MenuItem>
-                </Select>
-              </FormControl>
+            <FormControl fullWidth size="small">
+              <InputLabel id="client-interview">Client interview</InputLabel>
+              <Controller
+                name="clientInterivew"
+                defaultValue=""
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    labelId="client-interview"
+                    label="clientInterivew"
+                  >
+                    <MenuItem value={"yes"}>Yes</MenuItem>
+                    <MenuItem value={"no"}>No</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
               <small className="text-danger">
                 {errors.clientInterivew && errors.clientInterivew.message}
               </small>
@@ -492,20 +519,27 @@ export default function RequestForm() {
               </small>
             </div>
             <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-              <FormControl fullWidth size="small">
-                <InputLabel id="demo-simple-select-label">
-                  Interview status
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  label="Interview status"
-                  {...register("interviewStatus", registerOptions.interviewStatus)}
-                >
-                  <MenuItem value={"selected"}>Selected</MenuItem>
-                  <MenuItem value={"pending"}>Pending</MenuItem>
-                  <MenuItem value={"scheduled"}>Scheduled</MenuItem>
-                </Select>
-              </FormControl>
+            <FormControl fullWidth size="small">
+              <InputLabel id="demo-simple-select-label">
+                Interview status
+              </InputLabel>
+              <Controller
+                name="interviewStatus"
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    labelId="demo-simple-select-label"
+                    label="Interview status"
+                  >
+                    <MenuItem value={"selected"}>Selected</MenuItem>
+                    <MenuItem value={"pending"}>Pending</MenuItem>
+                    <MenuItem value={"scheduled"}>Scheduled</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
               <small className="text-danger">
                 {errors.interviewStatus && errors.interviewStatus.message}
               </small>
@@ -513,18 +547,24 @@ export default function RequestForm() {
 
 
             <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-              <FormControl fullWidth className="select-input" size="small">
-                <InputLabel id="status">Status</InputLabel>
-                <Select
-                  labelId="status"
-                  label="Status"
-                  {...register("status", registerOptions.status)}
-                >
-                  <MenuItem value={"open"}>Open</MenuItem>
-                  <MenuItem value={"inprogress"}>Inprogress</MenuItem>
-                  <MenuItem value={"close"}>Close</MenuItem>
-                </Select>
-              </FormControl>
+            <FormControl fullWidth size="small">
+              <InputLabel id="client-interview">Status</InputLabel>
+              <Controller
+                name="status"
+                defaultValue=''
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    labelId="status"
+                    label="Status"
+                  >
+                    <MenuItem value={"open"}>Open</MenuItem>
+                    <MenuItem value={"close"}>Close</MenuItem>
+                  </Select>
+                )}
+              />
+            </FormControl>
               <small className="text-danger">
                 {errors.status && errors.status.message}
               </small>

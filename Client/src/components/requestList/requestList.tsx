@@ -68,7 +68,7 @@ export default function RequestList() {
     setPage(value);
   };
 
-  const currentData = filteredList?.slice((page - 1) * 10, page * 10);
+  const filteredListData = filteredList?.slice((page - 1) * 10, page * 10);
   return (
     <div className="container pt-3 mh-600">
       <div className="row pb-2">
@@ -91,8 +91,8 @@ export default function RequestList() {
         filteredList={requestList}
         setFilteredList={setFilteredList}
       />
-      {filteredList?.length > 0 ? (
-        filteredList?.map((req: RequestForm, i: number) => (
+      {filteredListData?.length > 0 ? (
+        filteredListData?.map((req: RequestForm, i: number) => (
           <Accordion
             key={i}
             expanded={expanded === `panel${i}`}
@@ -231,11 +231,11 @@ export default function RequestList() {
       ) : (
         <div className="text-center pt-5">No results found</div>
       )}
-      {filteredList?.length > 0 && (
+      {filteredListData?.length > 0 && (
         <div className="d-flex py-3">
           <Pagination
             className=" ms-auto"
-            count={Math.ceil(filteredList?.length / 10)}
+            count={Math.ceil(filteredListData?.length / 10)}
             page={page}
             onChange={handlePageChange}
           />
