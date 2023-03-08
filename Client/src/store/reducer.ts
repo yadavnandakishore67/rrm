@@ -7,10 +7,9 @@ const slice = createSlice({
     name: 'rrm',
     initialState: initialState,
     reducers: {
-        // userLoggedIn: (state, actions) => {
-        //     state.loggedIn = true;
-        //     state.userName = actions.payload.empId;
-        // },
+        userLoggedOutRequested: (state) => {
+            state.userLoggedIn = false;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(getRequestList.fulfilled, (state: any, action: { payload: any; }) => {
@@ -20,7 +19,8 @@ const slice = createSlice({
             }
         })
         builder.addCase(loginUserRequested.fulfilled, (state: any, action: { payload: UserDetails }) => {
-            localStorage.setItem('user_Id', action.payload._id)
+            localStorage.setItem('user_Id', action.payload._id);
+            localStorage.setItem('userName', action.payload.emp_ID);
             return {
                 ...state,
                 userDetails: action.payload,

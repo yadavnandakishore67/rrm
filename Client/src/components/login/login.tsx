@@ -13,8 +13,8 @@ export default function Login() {
   const userLoggerIn = useSelector((state: State) => state.userLoggedIn);
   const navigate = useNavigate();
   useEffect(() => {
-  localStorage.clear();
-  }, [])
+    localStorage.clear();
+  }, []);
   useEffect(() => {
     if (userLoggerIn)
       navigate('requestList')
