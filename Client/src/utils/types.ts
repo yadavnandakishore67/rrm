@@ -91,7 +91,14 @@ export interface IFormInput {
     clientInterivew: string;
     comments: Comments[];
     createdBy: string;
-    newComment:string;
-    updatedBy:string;
+    newComment: string;
+    updatedBy: string;
 }
 
+export interface MessageModalDialogParams {
+    open: boolean,
+    title: String,
+    description: String,
+    onSubmit: (value: boolean) => void,
+    saveLabel: string
+}

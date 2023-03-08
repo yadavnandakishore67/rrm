@@ -12,7 +12,7 @@ export default function SearchFilter(props: any) {
     const [status, setStatus] = useState('');
 
     useEffect(() => {
-        setFilteredList((filteredList as RequestForm[]).filter((request) => {
+        setFilteredList((filteredList as RequestForm[])?.filter((request) => {
             return request.accountName.includes(accountName) &&
                 request.skillSet.every((r) => r.includes(skill)) &&
                 (experience ? request.experience === experience : true) &&
