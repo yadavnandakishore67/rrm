@@ -113,7 +113,7 @@ export default function RequestList() {
                             key !== "numberOfPositionsFullfilled" && (
                               <>
                                 {" "}
-                                <span>{val}:</span>
+                                <span className="fw-bolder">{val}:</span>
                                 <span>
                                   {req[key as keyof RequestForm] as string}
                                 </span>
@@ -121,7 +121,7 @@ export default function RequestList() {
                             )}
                           {key === "daysOpen" && req.status !== "closed" && (
                             <>
-                              <span>{val}:</span>
+                              <span className="fw-bolder">{val}:</span>
                               <span>
                                 {daysBetween(req.createdAt as string)}
                               </span>
@@ -130,7 +130,7 @@ export default function RequestList() {
                           {key === "numberOfPositionsFullfilled" && (
                             <>
                               {" "}
-                              <span>{val}:</span>
+                              <span className="fw-bolder">{val}:</span>
                               <span>
                                 {req.numberOfPositions -
                                   req.numberOfPositionsOffered}

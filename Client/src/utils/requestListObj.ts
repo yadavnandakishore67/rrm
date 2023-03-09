@@ -1,7 +1,7 @@
 
 export const requestFormBody = {
-    accountName: 'Account Name',
     clientPartner: 'Client Partner',
+    practiceName: 'Practise',
     enagagementManager: 'Enagagement Manager',
     role: 'Role',
     skillSet: 'Skils',
@@ -18,12 +18,12 @@ export const requestFormBody = {
     interviewStatus: 'Interview Status',
     daysOpen:'Duration',
     comments: 'Comments',
-   
 }
 export const requestFormHeader = {
+    accountName: 'Account Name',
     numberOfPositions: 'Requested',
     numberOfPositionsFullfilled: 'Closed',
-    practiceName: 'Practise',
+   
     status: 'Status',
     daysOpen:'Days Open'
 }
