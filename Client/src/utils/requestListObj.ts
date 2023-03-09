@@ -4,7 +4,7 @@ export const requestFormBody = {
     clientPartner: 'Client Partner',
     enagagementManager: 'Enagagement Manager',
     role: 'Role',
-    skillSet: 'Skils',
+    skillSet: 'Skills',
     experience: 'Experience',
     daysPassed: 'Days Passed',
     tentativeBillingStartDate: 'BillingStartDate',

@@ -49,7 +49,6 @@ export default function RequestForm() {
     updatedRequestData = {
       ...requestDetails,
       engagementManager: userDetails?.first_name,
-      skillSet: 'JavaScript',
       clientInterivew: requestDetails.clientInterivew ? 'yes' : 'no'
     }
   }
@@ -388,13 +387,18 @@ export default function RequestForm() {
                   control={control}
                   name="skillSet"
                   rules={registerOptions.skillSet}
-                  render={({ field: { onChange, value } }) => (
+                  render={({ field: { onChange } }) => (
                     <Autocomplete
                       multiple
                       freeSolo
                       limitTags={1}
                       id="skillSet"
                       options={skills}
+                      getOptionLabel={(option) => option}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      defaultValue={requestDetails.skillSet}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -404,10 +408,6 @@ export default function RequestForm() {
                         />
                       )}
                       disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
-                      onChange={(_, data) => {
-                        onChange(data);
-                        return data;
-                      }}
                     />
                   )}
                 />
