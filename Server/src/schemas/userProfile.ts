@@ -90,7 +90,7 @@ const UserProfileSchema: Schema = new Schema(
             type: String   // active, freeze, close, rejected, ....
         },
         clientInterivew: {
-            type: Boolean,
+            type: String,
             default:false
         },
         comments:[{

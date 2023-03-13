@@ -178,9 +178,9 @@ export default function RequestList() {
                             ? (value as string)
                             : Array.isArray(value)
                             ? value.map((v, q) => (
-                                <span key={q}>{v as string}</span>
+                                <span className="t-stack" key={q}>{v as string}</span>
                               ))
-                            : moment(value as string).format("DD-mm-yyyy")}
+                            : moment(value as string).format("DD-MM-YYYY")}
                         </p>
                       </div>
                     ) : k === "comments" ? (

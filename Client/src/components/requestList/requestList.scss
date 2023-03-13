@@ -2,3 +2,7 @@
 .mh-600{
     min-height: 600px;
 }
+
+.t-stack ~ .t-stack::before{
+    content: ", ";
+  }

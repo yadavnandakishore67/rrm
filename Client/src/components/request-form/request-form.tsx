@@ -37,8 +37,15 @@ export default function RequestForm() {
 
   const [open, setOpen] = useState<boolean>(false)
 
+  const { register, handleSubmit, setValue, setError, formState: { errors }, control, reset } = useForm<IFormInput>();
+
   React.useEffect(() => {
     console.log("requestDetails==>", userDetails?._id)
+    if (userDetails) {
+      reset(
+        { engagementManager: userDetails?.first_name },
+      );
+    }
   }, [userDetails]);
 
   const location = useLocation();
@@ -48,12 +55,10 @@ export default function RequestForm() {
   if (Object.keys(requestDetails).length > 0) {
     updatedRequestData = {
       ...requestDetails,
-      engagementManager: userDetails?.first_name,
-      clientInterivew: requestDetails.clientInterivew ? 'yes' : 'no'
+      engagementManager: requestDetails.enagagementManager ? requestDetails.enagagementManager.first_name : userDetails?.first_name,
     }
   }
 
-  const { register, handleSubmit, setValue, setError, formState: { errors }, control } = useForm<IFormInput>();
 
   const fields = [
     'accountName',
@@ -120,7 +125,7 @@ export default function RequestForm() {
     if (userDetails && userDetails?._id && !requestDetails.createdBy) {
       const requestData: any = {
         ...data,
-        engagementManager: { _id: userDetails?._id, first_name: userDetails.first_name },
+        enagagementManager: { _id: userDetails?._id, first_name: userDetails.first_name },
         comments: [{ author: { _id: userDetails?._id, first_name: userDetails.first_name }, comment: data.newComment, createdAt: new Date().toLocaleString() }],
         createdBy: userDetails?._id,
         updatedBy: userDetails?._id
@@ -131,7 +136,7 @@ export default function RequestForm() {
       requestDetails.comments.push({ author: { _id: userDetails?._id, first_name: userDetails?.first_name }, comment: data.newComment, createdAt: new Date().toLocaleString() })
       const requestData: any = {
         ...data,
-        engagementManager: { _id: userDetails?._id, first_name: userDetails?.first_name },
+        enagagementManager: { _id: userDetails?._id, first_name: userDetails?.first_name },
         comments: requestDetails.comments,
         updatedBy: userDetails?._id
       }
@@ -420,7 +425,6 @@ export default function RequestForm() {
                   <InputLabel id="client-interview">Client interview</InputLabel>
                   <Controller
                     name="clientInterivew"
-                    defaultValue=""
                     control={control}
                     render={({ field }) => (
                       <Select
@@ -428,8 +432,8 @@ export default function RequestForm() {
                         labelId="client-interview"
                         label="clientInterivew"
                       >
-                        <MenuItem value={"yes"}>Yes</MenuItem>
-                        <MenuItem value={"no"}>No</MenuItem>
+                        <MenuItem value={'Yes'}>Yes</MenuItem>
+                        <MenuItem value={'No'}>No</MenuItem>
                       </Select>
                     )}
                   />
@@ -453,7 +457,8 @@ export default function RequestForm() {
 
                         renderInput={(params) => <TextField {...params} size="small"
                           {...register("requestDateToPractice", registerOptions.requestDateToPractice)}
-                          disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                          disabled={Object.keys(requestDetails).length !== 0 && (!isAdmin || requestDetails._id) ? true : false}
+                          inputProps={{ ...params.inputProps, readOnly: Object.keys(requestDetails).length !== 0 && (!isAdmin || requestDetails._id) ? true : false }}
                         />}
                       />
                     </LocalizationProvider>
@@ -475,9 +480,11 @@ export default function RequestForm() {
                         inputFormat="MM/DD/YYYY"
                         value={value}
                         onChange={onChange}
-                        renderInput={(params) => <TextField {...params} size="small"
+                        renderInput={(params) => <TextField {...params}
+                          size="small"
                           {...register("requestDateToHiring", registerOptions.requestDateToHiring)}
-                          disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                          disabled={Object.keys(requestDetails).length !== 0 && (!isAdmin || requestDetails._id) ? true : false}
+                          inputProps={{ ...params.inputProps, readOnly: Object.keys(requestDetails).length !== 0 && (!isAdmin || requestDetails._id) ? true : false }}
                         />}
                       />
                     </LocalizationProvider>
