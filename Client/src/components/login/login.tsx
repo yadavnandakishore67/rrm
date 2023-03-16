@@ -43,7 +43,7 @@ export default function Login() {
                         className="form-control"
                         required
                         id="outlined-required"
-                        label="Emp ID"
+                        label="User Id"
                         value={empId}
                         onChange={(event) => setempId(event?.target.value)}
                       />
@@ -51,6 +51,7 @@ export default function Login() {
                     <div className="form-outline form-white mb-4">
                       <TextField
                         required
+                        type="password"
                         className="form-control"
                         label="Password"
                         value={password}
