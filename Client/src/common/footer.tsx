@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <div className="container-fluid bg-dark d-block">
+    <div className="container-fluid bg-dark d-block fixed-bottom">
       <div className=" text-white row ">
         <div className="nav-link text-center col-xs-12">Other Links</div>
         <div className="col-xs-12">
