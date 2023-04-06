@@ -55,7 +55,7 @@ export default function RequestForm() {
   if (Object.keys(requestDetails).length > 0) {
     updatedRequestData = {
       ...requestDetails,
-      engagementManager: requestDetails.enagagementManager ? requestDetails.enagagementManager.first_name : userDetails?.first_name,
+      engagementManager: requestDetails.createdBy ? requestDetails.createdBy.first_name : userDetails?.first_name,
     }
   }
 

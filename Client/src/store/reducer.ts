@@ -20,12 +20,12 @@ const slice = createSlice({
         })
         builder.addCase(loginUserRequested.fulfilled, (state: any, action: { payload: UserDetails }) => {
             localStorage.setItem('user_Id', action.payload._id);
-            localStorage.setItem('userName', action.payload.emp_ID);
+            localStorage.setItem('userName', action.payload.first_name);
             return {
                 ...state,
                 userDetails: action.payload,
                 userLoggedIn: true,
-                userName: action.payload.emp_ID
+                userName: action.payload.first_name
             }
         })
         builder.addCase(updateUserProfile.fulfilled, (state: any, action: { payload: any }) => {
@@ -46,7 +46,7 @@ const slice = createSlice({
                 ...state,
                 userDetails: action.payload,
                 userLoggedIn: true,
-                userName: action.payload.emp_ID
+                userName: action.payload.first_name
             }
         })
     }
