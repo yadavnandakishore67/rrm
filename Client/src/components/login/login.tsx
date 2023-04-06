@@ -55,7 +55,6 @@ export default function Login() {
                         className="form-control"
                         label="Password"
                         value={password}
-                        type="password"
                         onChange={(event) => setPassword(event?.target.value)}
                       />
                     </div>
