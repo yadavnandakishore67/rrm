@@ -1,6 +1,7 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import LogoutIcon from "@mui/icons-material/Logout";
-import LogoDevIcon from "@mui/icons-material/LogoDev";
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+
+
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { actions } from "../store/reducer";
@@ -16,18 +17,19 @@ export default function Header() {
     navigate('/');
   }
   return (
-    <div className="d-flex align-items-center flex-wrap bg-secondary pb-2">
-      <div className="me-auto px-3 fs-2">
-        <LogoDevIcon fontSize="large" />
+    <div className="d-flex align-items-center flex-wrap pb-2 header-rrm">
+      <div className="me-auto px-3 fs-5 pt-3">
+        RRM
       </div>
-      {userName && <div className="d-flex">
-        <div className="px-3 fs-2">
-          <AccountCircleIcon fontSize="large" /> <span>{userName}</span>
-        </div>
-        <div className="px-3 fs-2 cursor-pointer" onClick={logout}>
-          <LogoutIcon />
-        </div>
-      </div>}
+      {userName &&
+        <div className="d-flex">
+          <div className="px-3 fs-6 pt-3">
+            <AccountCircleIcon fontSize="medium" /> <span>Hi {userName}</span>
+          </div>
+          <div className="px-3 fs-6 cursor-pointer pt-3" onClick={logout}>
+            <PowerSettingsNewIcon fontSize="medium" />
+          </div>
+        </div>}
     </div>
   );
 }

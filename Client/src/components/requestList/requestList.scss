@@ -1,8 +1,12 @@
-
-.mh-600{
+.mh-600 {
     min-height: 600px;
 }
 
-.t-stack ~ .t-stack::before{
+.t-stack~.t-stack::before {
     content: ", ";
-  }
+}
+
+.filter-rrm {
+    display: flex;
+    flex-direction: column;
+}
