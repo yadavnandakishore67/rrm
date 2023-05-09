@@ -7,44 +7,52 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useLocation, useNavigate } from "react-router";
-import './request-form.scss'
+import "./request-form.scss";
 
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import React, { useEffect, useState } from "react";
-import { Dayjs } from 'dayjs';
+import { Dayjs } from "dayjs";
 
 import { useDispatch, useSelector } from "react-redux";
-import { createUserProfile, updateUserProfile } from "../../store/backend.action";
+import {
+  createUserProfile,
+  updateUserProfile,
+} from "../../store/backend.action";
 import { State } from "../../store/state";
 import { Comments, IFormInput, Roles } from "../../utils/types";
 import MessageModal from "../../common/message-modal";
 
-
-
-const skills = ["Java", "Python", "Javascript", "Angular", "React"];
-
 export default function RequestForm() {
+  let updatedRequestData = {};
 
-  let updatedRequestData = {}
-
-  const dispatch = useDispatch<any>()
+  const dispatch = useDispatch<any>();
 
   const userDetails = useSelector((state: State) => state.userDetails);
 
-  const isAdmin = useSelector((state: State) => state.userDetails?.role.name === Roles.admin);
+  const suggestions = useSelector((state: State) => state.suggestions);
 
-  const [open, setOpen] = useState<boolean>(false)
+  const isAdmin = useSelector(
+    (state: State) => state.userDetails?.role.name === Roles.admin
+  );
 
-  const { register, handleSubmit, setValue, setError, formState: { errors }, control, reset } = useForm<IFormInput>();
+  const [open, setOpen] = useState<boolean>(false);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    formState: { errors },
+    control,
+    reset,
+  } = useForm<IFormInput>();
 
   React.useEffect(() => {
-    console.log("requestDetails==>", userDetails?._id)
+    console.log("requestDetails==>", userDetails?._id);
     if (userDetails) {
-      reset(
-        { engagementManager: userDetails?.first_name },
-      );
+      reset({ engagementManager: userDetails?.first_name });
     }
   }, [userDetails]);
 
@@ -55,41 +63,42 @@ export default function RequestForm() {
   if (Object.keys(requestDetails).length > 0) {
     updatedRequestData = {
       ...requestDetails,
-      engagementManager: requestDetails.createdBy ? requestDetails.createdBy.first_name : userDetails?.first_name,
-    }
+      engagementManager: requestDetails.createdBy
+        ? requestDetails.createdBy.first_name
+        : userDetails?.first_name,
+    };
   }
 
-
   const fields = [
-    'accountName',
-    'engagementManager',
-    'clientPartner',
-    'role',
-    'daysPassed',
-    'experience',
-    'costRateCap',
-    'skillSet',
-    'practiceName',
-    'subPractice',
-    'subSubPractice',
-    'positionType',
-    'location',
-    'duration',
-    'daysOpen',
-    'numberOfPositions',
-    'numberOfPositionsFullfilled',
-    'numberOfPositionsOffered',
-    'interviewStatus',
-    'status',
-    'tentativeBillingStartDate',
-    'requestDateToPractice',
-    'requestDateToHiring',
-    'clientInterivew',
-    'newComment'
+    "accountName",
+    "engagementManager",
+    "clientPartner",
+    "role",
+    "daysPassed",
+    "experience",
+    "costRateCap",
+    "skillSet",
+    "practiceName",
+    "subPractice",
+    "subSubPractice",
+    "positionType",
+    "location",
+    "duration",
+    "daysOpen",
+    "numberOfPositions",
+    "numberOfPositionsFullfilled",
+    "numberOfPositionsOffered",
+    "interviewStatus",
+    "status",
+    "tentativeBillingStartDate",
+    "requestDateToPractice",
+    "requestDateToHiring",
+    "clientInterivew",
+    "newComment",
   ];
 
   useEffect(() => {
-    const data = updatedRequestData ? updatedRequestData : requestDetails
+    const data = updatedRequestData ? updatedRequestData : requestDetails;
     fields.forEach((field: any) => setValue(field, data[field]));
   }, []);
 
@@ -102,18 +111,21 @@ export default function RequestForm() {
     costRateCap: { required: "costRateCap is required" },
     skillSet: { required: "skillSet is required" },
     practiceName: { required: "practiceName is required" },
-    subPractice: { required: "subPractice is required" },
-    subSubPractice: { required: "subSubPractice is required" },
     positionType: { required: "positionType is required" },
     location: { required: "location is required" },
     duration: { required: "duration is required" },
-    daysOpen: { required: "daysOpen is required" },
     numberOfPositions: { required: "numberOfPositions is required" },
-    numberOfPositionsFullfilled: { required: "numberOfPositionsFullfilled is required" },
-    numberOfPositionsOffered: { required: "numberOfPositionsOffered is required" },
+    numberOfPositionsFullfilled: {
+      required: "numberOfPositionsFullfilled is required",
+    },
+    numberOfPositionsOffered: {
+      required: "numberOfPositionsOffered is required",
+    },
     interviewStatus: { required: "interviewStatus is required" },
     status: { required: "status is required" },
-    tentativeBillingStartDate: { required: "tentativeBillingStartDate is required" },
+    tentativeBillingStartDate: {
+      required: "tentativeBillingStartDate is required",
+    },
     requestDateToPractice: { required: "requestDateToPractice is required" },
     requestDateToHiring: { required: "requestDateToHiring is required" },
     clientInterivew: { required: "clientInterivew is required" },
@@ -125,51 +137,69 @@ export default function RequestForm() {
     if (userDetails && userDetails?._id && !requestDetails.createdBy) {
       const requestData: any = {
         ...data,
-        enagagementManager: { _id: userDetails?._id, first_name: userDetails.first_name },
-        comments: [{ author: { _id: userDetails?._id, first_name: userDetails.first_name }, comment: data.newComment, createdAt: new Date().toLocaleString() }],
+        enagagementManager: {
+          _id: userDetails?._id,
+          first_name: userDetails.first_name,
+        },
+        comments: [
+          {
+            author: {
+              _id: userDetails?._id,
+              first_name: userDetails.first_name,
+            },
+            comment: data.newComment,
+            createdAt: new Date().toLocaleString(),
+          },
+        ],
         createdBy: userDetails?._id,
-        updatedBy: userDetails?._id
-      }
-      console.log(requestData)
-      dispatch(createUserProfile(requestData))
+        updatedBy: userDetails?._id,
+      };
+      console.log(requestData);
+      dispatch(createUserProfile(requestData));
     } else {
-      requestDetails.comments.push({ author: { _id: userDetails?._id, first_name: userDetails?.first_name }, comment: data.newComment, createdAt: new Date().toLocaleString() })
+      requestDetails.comments.push({
+        author: { _id: userDetails?._id, first_name: userDetails?.first_name },
+        comment: data.newComment,
+        createdAt: new Date().toLocaleString(),
+      });
       const requestData: any = {
         ...data,
-        enagagementManager: { _id: userDetails?._id, first_name: userDetails?.first_name },
+        enagagementManager: {
+          _id: userDetails?._id,
+          first_name: userDetails?.first_name,
+        },
         comments: requestDetails.comments,
-        updatedBy: userDetails?._id
-      }
-      console.log(requestData)
-      dispatch(updateUserProfile({ id: requestDetails._id, input: requestData }))
+        updatedBy: userDetails?._id,
+      };
+      console.log(requestData);
+      dispatch(
+        updateUserProfile({ id: requestDetails._id, input: requestData })
+      );
     }
     setOpen(true);
   }
 
-
   const navigate = useNavigate();
 
   const routeUrl = () => {
-    navigate('/requestList')
-  }
+    navigate("/requestList");
+  };
   return (
     <>
       <div className="container">
         <div className="container pt-3">
           <div className="row pb-2">
             <div className="col-sm-8 col-md-8 col-8 p-0">
-              <h4 >Request Form</h4>
+              <h4>Request Form</h4>
             </div>
             <div className="col-sm-4 col-md-4 col-4 text-end p-0">
-              <Button variant="outlined" onClick={routeUrl} >
+              <Button variant="outlined" onClick={routeUrl}>
                 Back
               </Button>
             </div>
           </div>
         </div>
         <div className="card bg-white shadow-lg text-black p-3 mb-3">
-
-
           <form onSubmit={handleSubmit(formData)} className="container pb-3">
             <div className="row">
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -186,13 +216,34 @@ export default function RequestForm() {
                 </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-                <TextField
-                  label="Account Name"
-                  type="text"
-                  variant="outlined"
-                  size="small"
-                  {...register("accountName", registerOptions.accountName)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                <Controller
+                  control={control}
+                  name="accountName"
+                  rules={registerOptions.accountName}
+                  render={({ field: { onChange } }) => (
+                    <Autocomplete
+                      freeSolo
+                      limitTags={1}
+                      id="accountName"
+                      options={suggestions.accountNameSuggestions}
+                      defaultValue={requestDetails.accountName}
+                      getOptionLabel={(option) => option}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          size="small"
+                          label="Account Name"
+                        />
+                      )}
+                      disabled={
+                        Object.keys(requestDetails).length !== 0 && !isAdmin
+                      }
+                    />
+                  )}
                 />
                 <small className="text-danger">
                   {errors.accountName && errors.accountName.message}
@@ -205,7 +256,9 @@ export default function RequestForm() {
                   variant="outlined"
                   size="small"
                   {...register("clientPartner", registerOptions.clientPartner)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                  disabled={
+                    Object.keys(requestDetails).length !== 0 && !isAdmin
+                  }
                 />
                 <small className="text-danger">
                   {errors.clientPartner && errors.clientPartner.message}
@@ -218,7 +271,9 @@ export default function RequestForm() {
                   variant="outlined"
                   size="small"
                   {...register("practiceName", registerOptions.practiceName)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                  disabled={
+                    Object.keys(requestDetails).length !== 0 && !isAdmin
+                  }
                 />
                 <small className="text-danger">
                   {errors.practiceName && errors.practiceName.message}
@@ -230,12 +285,11 @@ export default function RequestForm() {
                   type="text"
                   variant="outlined"
                   size="small"
-                  {...register("subPractice", registerOptions.subPractice)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                  {...register("subPractice")}
+                  disabled={
+                    Object.keys(requestDetails).length !== 0 && !isAdmin
+                  }
                 />
-                <small className="text-danger">
-                  {errors.subPractice && errors.subPractice.message}
-                </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
@@ -243,19 +297,18 @@ export default function RequestForm() {
                   type="text"
                   variant="outlined"
                   size="small"
-                  {...register("subSubPractice", registerOptions.subSubPractice)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                  {...register("subSubPractice")}
+                  disabled={
+                    Object.keys(requestDetails).length !== 0 && !isAdmin
+                  }
                 />
-                <small className="text-danger">
-                  {errors.subSubPractice && errors.subSubPractice.message}
-                </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <FormControl fullWidth size="small">
                   <InputLabel id="positionType">Position type</InputLabel>
                   <Controller
                     name="positionType"
-                    defaultValue=''
+                    defaultValue=""
                     control={control}
                     render={({ field }) => (
                       <Select
@@ -280,7 +333,9 @@ export default function RequestForm() {
                   variant="outlined"
                   size="small"
                   {...register("duration", registerOptions.duration)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                  disabled={
+                    Object.keys(requestDetails).length !== 0 && !isAdmin
+                  }
                 />
                 <small className="text-danger">
                   {errors.duration && errors.duration.message}
@@ -293,7 +348,9 @@ export default function RequestForm() {
                   variant="outlined"
                   size="small"
                   {...register("costRateCap", registerOptions.costRateCap)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                  disabled={
+                    Object.keys(requestDetails).length !== 0 && !isAdmin
+                  }
                 />
                 <small className="text-danger">
                   {errors.costRateCap && errors.costRateCap.message}
@@ -311,16 +368,27 @@ export default function RequestForm() {
                         inputFormat="MM/DD/YYYY"
                         value={value}
                         onChange={onChange}
-                        renderInput={(params) => <TextField {...params} size="small"
-                          {...register("tentativeBillingStartDate", registerOptions.tentativeBillingStartDate)}
-                          disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
-                        />}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            size="small"
+                            {...register(
+                              "tentativeBillingStartDate",
+                              registerOptions.tentativeBillingStartDate
+                            )}
+                            disabled={
+                              Object.keys(requestDetails).length !== 0 &&
+                              !isAdmin
+                            }
+                          />
+                        )}
                       />
                     </LocalizationProvider>
                   )}
                 />
                 <small className="text-danger">
-                  {errors.tentativeBillingStartDate && errors.tentativeBillingStartDate.message}
+                  {errors.tentativeBillingStartDate &&
+                    errors.tentativeBillingStartDate.message}
                 </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -329,8 +397,13 @@ export default function RequestForm() {
                   type="number"
                   variant="outlined"
                   size="small"
-                  {...register("numberOfPositions", registerOptions.numberOfPositions)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                  {...register(
+                    "numberOfPositions",
+                    registerOptions.numberOfPositions
+                  )}
+                  disabled={
+                    Object.keys(requestDetails).length !== 0 && !isAdmin
+                  }
                 />
                 <small className="text-danger">
                   {errors.numberOfPositions && errors.numberOfPositions.message}
@@ -344,7 +417,9 @@ export default function RequestForm() {
                   variant="outlined"
                   size="small"
                   {...register("role", registerOptions.role)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                  disabled={
+                    Object.keys(requestDetails).length !== 0 && !isAdmin
+                  }
                 />
                 <small className="text-danger">
                   {errors.role && errors.role.message}
@@ -355,14 +430,10 @@ export default function RequestForm() {
                   <InputLabel id="status">Location</InputLabel>
                   <Controller
                     name="location"
-                    defaultValue=''
+                    defaultValue=""
                     control={control}
                     render={({ field }) => (
-                      <Select
-                        {...field}
-                        labelId="status"
-                        label="Status"
-                      >
+                      <Select {...field} labelId="status" label="Status">
                         <MenuItem value={"gurugram"}>Gurugram</MenuItem>
                         <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
                         <MenuItem value={"pune"}>Pune</MenuItem>
@@ -381,7 +452,9 @@ export default function RequestForm() {
                   variant="outlined"
                   size="small"
                   {...register("experience", registerOptions.experience)}
-                  disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                  disabled={
+                    Object.keys(requestDetails).length !== 0 && !isAdmin
+                  }
                 />
                 <small className="text-danger">
                   {errors.experience && errors.experience.message}
@@ -396,9 +469,9 @@ export default function RequestForm() {
                     <Autocomplete
                       multiple
                       freeSolo
-                      limitTags={1}
+                      limitTags={3}
                       id="skillSet"
-                      options={skills}
+                      options={suggestions.skillSuggestions}
                       getOptionLabel={(option) => option}
                       onChange={(event, item) => {
                         onChange(item);
@@ -412,7 +485,9 @@ export default function RequestForm() {
                           label="Skill set"
                         />
                       )}
-                      disabled={Object.keys(requestDetails).length !== 0 && !isAdmin}
+                      disabled={
+                        Object.keys(requestDetails).length !== 0 && !isAdmin
+                      }
                     />
                   )}
                 />
@@ -422,7 +497,9 @@ export default function RequestForm() {
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <FormControl fullWidth size="small">
-                  <InputLabel id="client-interview">Client interview</InputLabel>
+                  <InputLabel id="client-interview">
+                    Client interview
+                  </InputLabel>
                   <Controller
                     name="clientInterivew"
                     control={control}
@@ -432,8 +509,8 @@ export default function RequestForm() {
                         labelId="client-interview"
                         label="clientInterivew"
                       >
-                        <MenuItem value={'Yes'}>Yes</MenuItem>
-                        <MenuItem value={'No'}>No</MenuItem>
+                        <MenuItem value={"Yes"}>Yes</MenuItem>
+                        <MenuItem value={"No"}>No</MenuItem>
                       </Select>
                     )}
                   />
@@ -454,18 +531,37 @@ export default function RequestForm() {
                         inputFormat="MM/DD/YYYY"
                         value={value}
                         onChange={onChange}
-
-                        renderInput={(params) => <TextField {...params} size="small"
-                          {...register("requestDateToPractice", registerOptions.requestDateToPractice)}
-                          disabled={Object.keys(requestDetails).length !== 0 && (!isAdmin || requestDetails._id) ? true : false}
-                          inputProps={{ ...params.inputProps, readOnly: Object.keys(requestDetails).length !== 0 && (!isAdmin || requestDetails._id) ? true : false }}
-                        />}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            size="small"
+                            {...register(
+                              "requestDateToPractice",
+                              registerOptions.requestDateToPractice
+                            )}
+                            disabled={
+                              Object.keys(requestDetails).length !== 0 &&
+                              (!isAdmin || requestDetails._id)
+                                ? true
+                                : false
+                            }
+                            inputProps={{
+                              ...params.inputProps,
+                              readOnly:
+                                Object.keys(requestDetails).length !== 0 &&
+                                (!isAdmin || requestDetails._id)
+                                  ? true
+                                  : false,
+                            }}
+                          />
+                        )}
                       />
                     </LocalizationProvider>
                   )}
                 />
                 <small className="text-danger">
-                  {errors.requestDateToPractice && errors.requestDateToPractice.message}
+                  {errors.requestDateToPractice &&
+                    errors.requestDateToPractice.message}
                 </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -480,18 +576,37 @@ export default function RequestForm() {
                         inputFormat="MM/DD/YYYY"
                         value={value}
                         onChange={onChange}
-                        renderInput={(params) => <TextField {...params}
-                          size="small"
-                          {...register("requestDateToHiring", registerOptions.requestDateToHiring)}
-                          disabled={Object.keys(requestDetails).length !== 0 && (!isAdmin || requestDetails._id) ? true : false}
-                          inputProps={{ ...params.inputProps, readOnly: Object.keys(requestDetails).length !== 0 && (!isAdmin || requestDetails._id) ? true : false }}
-                        />}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            size="small"
+                            {...register(
+                              "requestDateToHiring",
+                              registerOptions.requestDateToHiring
+                            )}
+                            disabled={
+                              Object.keys(requestDetails).length !== 0 &&
+                              (!isAdmin || requestDetails._id)
+                                ? true
+                                : false
+                            }
+                            inputProps={{
+                              ...params.inputProps,
+                              readOnly:
+                                Object.keys(requestDetails).length !== 0 &&
+                                (!isAdmin || requestDetails._id)
+                                  ? true
+                                  : false,
+                            }}
+                          />
+                        )}
                       />
                     </LocalizationProvider>
                   )}
                 />
                 <small className="text-danger">
-                  {errors.requestDateToHiring && errors.requestDateToHiring.message}
+                  {errors.requestDateToHiring &&
+                    errors.requestDateToHiring.message}
                 </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -500,22 +615,25 @@ export default function RequestForm() {
                   type="number"
                   variant="outlined"
                   size="small"
-                  {...register("daysOpen", registerOptions.daysOpen)}
+                  {...register("daysOpen")}
+                  disabled
                 />
-                <small className="text-danger">
-                  {errors.daysOpen && errors.daysOpen.message}
-                </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
                   label="Number of positions offered"
                   type="number"
                   variant="outlined"
+                  defaultValue={0}
                   size="small"
-                  {...register("numberOfPositionsOffered", registerOptions.numberOfPositionsOffered)}
+                  {...register(
+                    "numberOfPositionsOffered",
+                    registerOptions.numberOfPositionsOffered
+                  )}
                 />
                 <small className="text-danger">
-                  {errors.numberOfPositionsOffered && errors.numberOfPositionsOffered.message}
+                  {errors.numberOfPositionsOffered &&
+                    errors.numberOfPositionsOffered.message}
                 </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -524,10 +642,14 @@ export default function RequestForm() {
                   type="number"
                   variant="outlined"
                   size="small"
-                  {...register("numberOfPositionsFullfilled", registerOptions.numberOfPositionsFullfilled)}
+                  {...register(
+                    "numberOfPositionsFullfilled",
+                    registerOptions.numberOfPositionsFullfilled
+                  )}
                 />
                 <small className="text-danger">
-                  {errors.numberOfPositionsFullfilled && errors.numberOfPositionsFullfilled.message}
+                  {errors.numberOfPositionsFullfilled &&
+                    errors.numberOfPositionsFullfilled.message}
                 </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -538,7 +660,7 @@ export default function RequestForm() {
                   <Controller
                     name="interviewStatus"
                     control={control}
-                    defaultValue=''
+                    defaultValue=""
                     render={({ field }) => (
                       <Select
                         {...field}
@@ -557,20 +679,15 @@ export default function RequestForm() {
                 </small>
               </div>
 
-
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <FormControl fullWidth size="small">
                   <InputLabel id="client-interview">Status</InputLabel>
                   <Controller
                     name="status"
-                    defaultValue=''
+                    defaultValue=""
                     control={control}
                     render={({ field }) => (
-                      <Select
-                        {...field}
-                        labelId="status"
-                        label="Status"
-                      >
+                      <Select {...field} labelId="status" label="Status">
                         <MenuItem value={"open"}>Open</MenuItem>
                         <MenuItem value={"close"}>Close</MenuItem>
                       </Select>
@@ -582,34 +699,37 @@ export default function RequestForm() {
                 </small>
               </div>
 
-
-              {Object.keys(requestDetails).length !== 0 && <div className='form-group col-sm-12 col-md-12 col-12'>
-                <label className="control-label fw-bold">comments:</label>
-                <div className="form-control-static">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">User</th>
-                        <th scope="col">Create Date</th>
-                        <th scope="col">Comment</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        (requestDetails.comments as Comments[])?.map((r, z) => {
-                          return <tr key={z}>
-                            <th scope="row">{z + 1}</th>
-                            <td>{(r as Comments).author.first_name}</td>
-                            <td>{(r as Comments).createdAt}</td>
-                            <td>{(r as Comments).comment}</td>
-                          </tr>
-                        })
-                      }
-                    </tbody>
-                  </table>
+              {Object.keys(requestDetails).length !== 0 && (
+                <div className="form-group col-sm-12 col-md-12 col-12">
+                  <label className="control-label fw-bold">comments:</label>
+                  <div className="form-control-static">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">User</th>
+                          <th scope="col">Create Date</th>
+                          <th scope="col">Comment</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(requestDetails.comments as Comments[])?.map(
+                          (r, z) => {
+                            return (
+                              <tr key={z}>
+                                <th scope="row">{z + 1}</th>
+                                <td>{(r as Comments).author.first_name}</td>
+                                <td>{(r as Comments).createdAt}</td>
+                                <td>{(r as Comments).comment}</td>
+                              </tr>
+                            );
+                          }
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>}
+              )}
               <div className="col-xs-12 col-sm-12 col-md-12 my-2">
                 <TextField
                   className="w-100"
@@ -634,11 +754,17 @@ export default function RequestForm() {
           </form>
         </div>
       </div>
-      <MessageModal open={open} title={'Messaage'} description={'updated successfully'} onSubmit={function (value: boolean): void {
-        console.log('hey i am clicked', value);
-        setOpen(false);
-        routeUrl();
-      }} saveLabel={"Ok"} />
+      <MessageModal
+        open={open}
+        title={"Messaage"}
+        description={"updated successfully"}
+        onSubmit={function (value: boolean): void {
+          console.log("hey i am clicked", value);
+          setOpen(false);
+          routeUrl();
+        }}
+        saveLabel={"Ok"}
+      />
     </>
   );
 }

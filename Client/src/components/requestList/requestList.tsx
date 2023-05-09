@@ -15,6 +15,7 @@ import { State } from "../../store/state";
 import {
   deleteRequestRequested,
   getRequestList,
+  getSuggestions,
 } from "../../store/backend.action";
 import { Comments, RequestForm, Roles, User } from "../../utils/types";
 import moment, { MomentInput } from "moment";
@@ -48,6 +49,7 @@ export default function RequestList() {
 
   //navigation reuestForm page
   const navigateToForm = (req?: any) => {
+    dispatch(getSuggestions());
     navigate("/requestForm", { state: { details: req } });
   };
 
@@ -108,7 +110,10 @@ export default function RequestList() {
                   {Object.entries(requestFormHeader).map(([key, val], q) => {
                     return (
                       <>
-                        <div key={q} className="col-md-2 col-sm-4 col-6 filter-rrm">
+                        <div
+                          key={q}
+                          className="col-md-2 col-sm-4 col-6 filter-rrm"
+                        >
                           {key !== "daysOpen" &&
                             key !== "numberOfPositionsFullfilled" && (
                               <>
@@ -177,10 +182,12 @@ export default function RequestList() {
                           {!Array.isArray(value) && !isDate(value)
                             ? (value as string)
                             : Array.isArray(value)
-                              ? value.map((v, q) => (
-                                <span className="t-stack" key={q}>{v as string}</span>
+                            ? value.map((v, q) => (
+                                <span className="t-stack" key={q}>
+                                  {v as string}
+                                </span>
                               ))
-                              : moment(value as string).format("DD-MM-YYYY")}
+                            : moment(value as string).format("DD-MM-YYYY")}
                         </p>
                       </div>
                     ) : k === "comments" ? (
