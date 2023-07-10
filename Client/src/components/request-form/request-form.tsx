@@ -312,9 +312,12 @@ export default function RequestForm() {
                     control={control}
                     render={({ field }) => (
                       <Select
-                        {...field}
+                      {...field}
                         labelId="positionType"
                         label="Position type"
+                        onChange={(event)=> {
+                          console.log(event.target.value);
+                        }}
                       >
                         <MenuItem value={"billable"}>Billable</MenuItem>
                         <MenuItem value={"buffer"}>Buffer</MenuItem>
@@ -367,7 +370,9 @@ export default function RequestForm() {
                         label="Tentative billing start date"
                         inputFormat="MM/DD/YYYY"
                         value={value}
-                        onChange={onChange}
+                        onChange ={(event, item) => {
+                          onChange(item!);
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -433,7 +438,9 @@ export default function RequestForm() {
                     defaultValue=""
                     control={control}
                     render={({ field }) => (
-                      <Select {...field} labelId="status" label="Status">
+                      <Select {...field} labelId="status" label="Status" onChange={(event)=> {
+                        console.log(event.target.value);
+                      }}>
                         <MenuItem value={"gurugram"}>Gurugram</MenuItem>
                         <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
                         <MenuItem value={"pune"}>Pune</MenuItem>
@@ -508,6 +515,9 @@ export default function RequestForm() {
                         {...field}
                         labelId="client-interview"
                         label="clientInterivew"
+                        onChange={(event)=> {
+                          console.log(event.target.value);
+                        }}
                       >
                         <MenuItem value={"Yes"}>Yes</MenuItem>
                         <MenuItem value={"No"}>No</MenuItem>
@@ -530,7 +540,9 @@ export default function RequestForm() {
                         label="Request date to practice"
                         inputFormat="MM/DD/YYYY"
                         value={value}
-                        onChange={onChange}
+                        onChange={(event, item) => {
+                          onChange(item!);
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -575,7 +587,9 @@ export default function RequestForm() {
                         label="requestDateToHiring"
                         inputFormat="MM/DD/YYYY"
                         value={value}
-                        onChange={onChange}
+                        onChange={(event, item) => {
+                          onChange(item!);
+                        }}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -666,6 +680,9 @@ export default function RequestForm() {
                         {...field}
                         labelId="demo-simple-select-label"
                         label="Interview status"
+                        onChange={(event)=> {
+                          console.log(event.target.value);
+                        }}
                       >
                         <MenuItem value={"selected"}>Selected</MenuItem>
                         <MenuItem value={"pending"}>Pending</MenuItem>
@@ -687,7 +704,9 @@ export default function RequestForm() {
                     defaultValue=""
                     control={control}
                     render={({ field }) => (
-                      <Select {...field} labelId="status" label="Status">
+                      <Select  {...field} labelId="status" label="Status" onChange={(event)=> {
+                        console.log(event.target.value);
+                      }}>
                         <MenuItem value={"open"}>Open</MenuItem>
                         <MenuItem value={"close"}>Close</MenuItem>
                       </Select>
