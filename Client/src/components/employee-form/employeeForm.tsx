@@ -72,11 +72,8 @@ export default function EmployeeForm() {
 
   function formData(data: any) {
     if (Object.keys(updatedEmployeeData).length == 0) {
-      console.log("new employee", data);
       dispatch(createEmployee(data));
     } else {
-      console.log("update emp");
-      console.log(data);
       dispatch(updateEmployee({ id: updatedEmployeeId, input: data }));
     }
     setOpen(true);
@@ -262,7 +259,6 @@ export default function EmployeeForm() {
         title={"Messaage"}
         description={"updated successfully"}
         onSubmit={function (value: boolean): void {
-          console.log("hey i am clicked", value);
           setOpen(false);
           routeUrl();
         }}

@@ -26,7 +26,6 @@ const createEmployee = async (req: Request, res: Response) => {
 const updateEmployee = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    console.log(req.body);
     const employee = await employeeModal.findOneAndUpdate(
       { _id: id },
       req.body
@@ -41,10 +40,8 @@ const updateEmployee = async (req: Request, res: Response) => {
 const deleteEmployee = async (req: Request, res: Response) => {
   try {
     const { Id } = req.params;
-    console.log("id", Id);
     await employeeModal.findOneAndDelete({ empId: Id });
     const result = await employeeModal.find();
-    console.log("result", result);
     res.status(200).json({ employees: result });
   } catch (err) {
     res.send(err);

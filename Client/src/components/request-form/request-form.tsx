@@ -50,7 +50,6 @@ export default function RequestForm() {
   } = useForm<IFormInput>();
 
   React.useEffect(() => {
-    console.log("requestDetails==>", userDetails?._id);
     if (userDetails) {
       reset({ engagementManager: userDetails?.first_name });
     }
@@ -133,7 +132,6 @@ export default function RequestForm() {
   };
 
   function formData(data: IFormInput) {
-    console.log(data);
     if (userDetails && userDetails?._id && !requestDetails.createdBy) {
       const requestData: any = {
         ...data,
@@ -154,7 +152,6 @@ export default function RequestForm() {
         createdBy: userDetails?._id,
         updatedBy: userDetails?._id,
       };
-      console.log(requestData);
       dispatch(createUserProfile(requestData));
     } else {
       requestDetails.comments.push({
@@ -171,7 +168,6 @@ export default function RequestForm() {
         comments: requestDetails.comments,
         updatedBy: userDetails?._id,
       };
-      console.log(requestData);
       dispatch(
         updateUserProfile({ id: requestDetails._id, input: requestData })
       );
@@ -788,7 +784,6 @@ export default function RequestForm() {
         title={"Messaage"}
         description={"updated successfully"}
         onSubmit={function (value: boolean): void {
-          console.log("hey i am clicked", value);
           setOpen(false);
           routeUrl();
         }}

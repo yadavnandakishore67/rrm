@@ -17,7 +17,6 @@ import {
 import ReactPaginate from "react-paginate";
 
 export default function EmployeesList() {
-  // const role = useSelector((state: State) => state.userDetails?.role.name);
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
   const role = "Admin";
@@ -26,12 +25,6 @@ export default function EmployeesList() {
   const employeesList = useSelector((state: State) => state.employeesList);
   const [page, setPage] = useState(0);
   const isView = useRef(false);
-  // const handlePageChange = (
-  //   event: React.ChangeEvent<unknown>,
-  //   value: number
-  // ) => {
-  //   setPage(value);
-  // };
   const employeesPerPage = 5;
   const employeesVisited = page * employeesPerPage;
   const handlePageChange = (selectedItem: { selected: number }) => {
@@ -59,7 +52,7 @@ export default function EmployeesList() {
     employeesVisited + employeesPerPage
   );
   function employeeFilter(searchString: string) {
-    console.log(searchString);
+    setPage(0);
     setFilteredList(
       (employeesList as Employee[])?.filter((request) => {
         return request.empName
