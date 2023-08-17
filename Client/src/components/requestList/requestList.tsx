@@ -208,9 +208,11 @@ export default function RequestList() {
                                 return (
                                   <tr key={z}>
                                     <th scope="row">{z + 1}</th>
-                                    <td>{(r as Comments).author.first_name}</td>
-                                    <td>{(r as Comments).createdAt}</td>
-                                    <td>{(r as Comments).comment}</td>
+                                    <td>
+                                      {(r as Comments)?.author?.first_name}
+                                    </td>
+                                    <td>{(r as Comments)?.createdAt}</td>
+                                    <td>{(r as Comments)?.comment}</td>
                                   </tr>
                                 );
                               })}

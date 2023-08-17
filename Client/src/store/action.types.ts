@@ -7,4 +7,9 @@ export enum BackendActionTypes {
   GetUserDetails = "GET_USER_DETAILS",
   UpdateUserProfile = "UPDATE_USER_PROFILE",
   GetSuggestions = "GET_SUGGESTIONS",
+  GetEmployeesList = "GET_EMPLOYEES_LIST",
+  GetEmployeeDetails = "GET_EMPLOYEE_DETAILS",
+  CreateEmployee = "CREATE_EMPLOYEE",
+  UpdateEmployee = "UPDATE_EMPLOYEE",
+  DeleteEmployee = "DELETE_EMPLOYEE",
 }

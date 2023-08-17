@@ -1,7 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { UserDetails } from "../utils/types";
 import {
+  deleteEmployee,
   deleteRequestRequested,
+  getEmployeesList,
   getRequestList,
   getSuggestions,
   getUserDataRequested,
@@ -77,6 +79,24 @@ const slice = createSlice({
         return {
           ...state,
           suggestions: action.payload.data.suggestions[0],
+        };
+      }
+    );
+    builder.addCase(
+      getEmployeesList.fulfilled,
+      (state: any, action: { payload: any }) => {
+        return {
+          ...state,
+          employeesList: action.payload.data.employees,
+        };
+      }
+    );
+    builder.addCase(
+      deleteEmployee.fulfilled,
+      (state: any, action: { payload: any }) => {
+        return {
+          ...state,
+          employeesList: action.payload.data.employees,
         };
       }
     );

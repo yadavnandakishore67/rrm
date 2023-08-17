@@ -24,4 +24,18 @@ export interface State {
   userDetails?: UserDetails;
   userLoggedIn: boolean;
   suggestions: Suggestions;
+  employeesList?: Employee[];
+  employeeDetails?: Employee;
+}
+
+export interface Employee {
+  empId: string;
+  empName: string;
+  experience: string;
+  role: string;
+  skills: string[];
+  practice: string;
+  reportingManager: string;
+  billingStatus: string;
+  // empLogo: string;
 }

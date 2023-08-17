@@ -5,12 +5,13 @@ import userRoute from "./routes/user";
 import usersProfileRoute from "./routes/usersProfile";
 import APIErrorHandler from "./errors/APIError.handler";
 import suggestionsRoute from "./routes/suggestions";
+import employeesRoute from "./routes/employees";
 
 var bodyParser = require("body-parser");
 
 const app: Express = express();
 const PORT: string | number = process.env.PORT || 4000;
-const uri: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@clustertodo.fcmnr5b.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
+const uri: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.fcmnr5b.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 app.use("/users", userRoute);
 app.use("/userProfiles", usersProfileRoute);
 app.use("/suggestions", suggestionsRoute);
+app.use("/employees", employeesRoute);
 
 app.use(APIErrorHandler);
 

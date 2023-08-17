@@ -63,7 +63,38 @@ export const getSuggestions: any = createAsyncThunk(
   BackendActionTypes.GetSuggestions,
   async () => {
     const resp = await get("suggestions");
-    console.log("suggestions response", resp);
+    return resp;
+  }
+);
+
+export const getEmployeesList: any = createAsyncThunk(
+  BackendActionTypes.GetEmployeesList,
+  async () => {
+    const resp = await get("employees");
+    return resp;
+  }
+);
+
+export const createEmployee = createAsyncThunk(
+  BackendActionTypes.CreateEmployee,
+  async (input: IFormInput) => {
+    const resp = await post(`employees/employee`, input);
+    return resp;
+  }
+);
+
+export const updateEmployee = createAsyncThunk(
+  BackendActionTypes.UpdateEmployee,
+  async (payload: { id: string; input: any }) => {
+    const resp = await put(`employees/employee`, payload.id, payload.input);
+    return resp;
+  }
+);
+
+export const deleteEmployee = createAsyncThunk(
+  BackendActionTypes.DeleteEmployee,
+  async (id: string) => {
+    const resp = await deleteItem("employees/employee", id);
     return resp;
   }
 );

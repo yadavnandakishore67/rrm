@@ -1,0 +1,42 @@
+.MuiCard-root {
+  margin-left: 5%;
+  margin-top: 1em;
+  width: 90%;
+  .discription {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    & .MuiTypography-overline {
+      color: rgb(14, 179, 247);
+    }
+    & .MuiButton-outlined {
+      max-height: 40px;
+    }
+    & .MuiButtonGroup-outlined {
+      align-self: center;
+    }
+  }
+}
+.paginationBtns {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  list-style-type: none;
+  & a {
+    padding: 10px;
+    margin: 8px;
+    border-radius: 5px;
+    border: 1px solid blue;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  & a:hover {
+    color: white !important;
+    background-color: blue;
+  }
+}
+.paginationActive {
+  color: white !important;
+  background-color: blue;
+}
