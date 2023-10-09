@@ -24,12 +24,13 @@ export default function EmployeesList() {
   const [filteredList, setFilteredList] = useState<Employee[]>([]);
   const employeesList = useSelector((state: State) => state.employeesList);
   const [page, setPage] = useState(0);
-  const isView = useRef(false);
   const employeesPerPage = 5;
   const employeesVisited = page * employeesPerPage;
+
   const handlePageChange = (selectedItem: { selected: number }) => {
     setPage(selectedItem.selected);
   };
+
   useEffect(() => {
     setFilteredList(employeesList as Employee[]);
   }, [employeesList]);
@@ -38,19 +39,27 @@ export default function EmployeesList() {
   useEffect(() => {
     dispatch(getEmployeesList());
   }, []);
+
   function navigateToForm(req?: Employee) {
     dispatch(getSuggestions());
     navigate("/employeeForm", {
-      state: { details: req, isView: isView.current },
+      state: { details: req },
     });
   }
+
   function deleteForm(req: Employee) {
     dispatch(deleteEmployee(req.empId));
   }
+
+  function navigateToView(req: Employee) {
+    navigate("/employeeView", { state: { empData: req } });
+  }
+
   const filteredListData = filteredList?.slice(
     employeesVisited,
     employeesVisited + employeesPerPage
   );
+
   function employeeFilter(searchString: string) {
     setPage(0);
     setFilteredList(
@@ -61,6 +70,7 @@ export default function EmployeesList() {
       })
     );
   }
+
   const pageCount =
     filteredList?.length > 0
       ? Math.ceil(filteredList.length / employeesPerPage)
@@ -140,8 +150,7 @@ export default function EmployeesList() {
                 >
                   <Button
                     onClick={() => {
-                      isView.current = true;
-                      navigateToForm(req);
+                      navigateToView(req);
                     }}
                   >
                     View

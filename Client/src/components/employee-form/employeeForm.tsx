@@ -39,7 +39,6 @@ export default function EmployeeForm() {
   updatedEmployeeData = location?.state?.details ? location.state.details : {};
   const updatedEmployeeId =
     location?.state?.details && location.state.details._id;
-  const isView = location?.state?.isView ? location.state.isView : false;
 
   const suggestions = useSelector((state: State) => state.suggestions);
 
@@ -109,7 +108,6 @@ export default function EmployeeForm() {
                   variant="outlined"
                   size="small"
                   {...register("empId", registerOptions.empId)}
-                  disabled={isView}
                 />
                 <small className="text-danger">
                   {errors.empId && errors.empId.message}
@@ -122,7 +120,6 @@ export default function EmployeeForm() {
                   variant="outlined"
                   size="small"
                   {...register("empName", registerOptions.empName)}
-                  disabled={isView}
                 />
                 <small className="text-danger">
                   {errors.empName && errors.empName.message}
@@ -135,7 +132,6 @@ export default function EmployeeForm() {
                   variant="outlined"
                   size="small"
                   {...register("experience", registerOptions.experience)}
-                  disabled={isView}
                 />
                 <small className="text-danger">
                   {errors.experience && errors.experience.message}
@@ -148,7 +144,6 @@ export default function EmployeeForm() {
                   variant="outlined"
                   size="small"
                   {...register("role")}
-                  disabled={isView}
                 />
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
@@ -176,7 +171,6 @@ export default function EmployeeForm() {
                           label="Skills"
                         />
                       )}
-                      disabled={isView}
                     />
                   )}
                 />
@@ -199,7 +193,6 @@ export default function EmployeeForm() {
                         onChange={(event) => {
                           setValue("practice", event.target.value);
                         }}
-                        disabled={isView}
                       >
                         <MenuItem value={"App Dev"}>App Dev</MenuItem>
                         <MenuItem value={"Q&A"}>Q&A</MenuItem>
@@ -215,7 +208,6 @@ export default function EmployeeForm() {
                   variant="outlined"
                   size="small"
                   {...register("reportingManager")}
-                  disabled={isView}
                 />
                 <small className="text-danger"></small>
               </div>
@@ -234,7 +226,6 @@ export default function EmployeeForm() {
                         onChange={(event) => {
                           setValue("billingStatus", event.target.value);
                         }}
-                        disabled={isView}
                       >
                         <MenuItem value={"Billable"}>Billable</MenuItem>
                         <MenuItem value={"Non-Billable"}>Non-Billable</MenuItem>
@@ -244,13 +235,11 @@ export default function EmployeeForm() {
                 </FormControl>
               </div>
             </div>
-            {!isView && (
-              <div className="text-center">
-                <Button variant="contained" type="submit">
-                  Submit
-                </Button>
-              </div>
-            )}
+            <div className="text-center">
+              <Button variant="contained" type="submit">
+                Submit
+              </Button>
+            </div>
           </form>
         </div>
       </div>
