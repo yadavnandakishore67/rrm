@@ -23,10 +23,13 @@ const getAllUserProfiles = async (req: Request, res: Response) => {
 const createUserProfile = async (req: any, res: any) => {
   try {
     const body = req.body;
-    await suggestionsController.updateSuggestions(
-      req.body.accountName,
-      req.body.skillSet
-    );
+    console.log("req.body.skillSet===>",req.body.skillSet)
+    // if(req.body.accountName || req.body.skillSet ){
+    //   const suggestions =    await suggestionsController.updateSuggestions(
+    //     req.body.accountName,
+    //     req.body.skillSet
+    //   );
+    //   }
     const userProfile = new userProfileModal(body);
 
     const result = await userProfile.save();
@@ -51,10 +54,14 @@ const getUserProfile = async (req: Request, res: Response) => {
 const updateUserProfile = async (req: Request, res: Response, next: any) => {
   try {
     const { id } = req.params;
-    await suggestionsController.updateSuggestions(
-      req.body.accountName,
-      req.body.skillSet
-    );
+    console.log("req.body.skillSet===>",req.body.skillSet)
+    // if(req.body.accountName || req.body.skillSet ){
+    // const suggestions =    await suggestionsController.updateSuggestions(
+    //   req.body.accountName,
+    //   req.body.skillSet
+    // );
+    // }
+    
     const user = await userProfileModal.findOneAndUpdate({ _id: id }, req.body);
     res.status(200).json({ user: user });
   } catch (error) {

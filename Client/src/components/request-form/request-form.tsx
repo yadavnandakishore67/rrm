@@ -90,7 +90,7 @@ export default function RequestForm() {
     "interviewStatus",
     "status",
     "tentativeBillingStartDate",
-    "requestDateToPractice",
+"requestDateToPractice",
     "requestDateToHiring",
     "clientInterivew",
     "newComment",
@@ -152,6 +152,7 @@ export default function RequestForm() {
         createdBy: userDetails?._id,
         updatedBy: userDetails?._id,
       };
+      console.log("requestData===>",requestData)
       dispatch(createUserProfile(requestData));
     } else {
       requestDetails.comments.push({
@@ -355,7 +356,7 @@ export default function RequestForm() {
                   {errors.costRateCap && errors.costRateCap.message}
                 </small>
               </div>
-              <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+             <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <Controller
                   control={control}
                   name="tentativeBillingStartDate"
@@ -366,9 +367,7 @@ export default function RequestForm() {
                         label="Tentative billing start date"
                         inputFormat="MM/DD/YYYY"
                         value={value}
-                        onChange={(event, item: string | undefined) => {
-                          onChange(item as string);
-                        }}
+                        onChange={onChange}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -541,9 +540,7 @@ export default function RequestForm() {
                         label="Request date to practice"
                         inputFormat="MM/DD/YYYY"
                         value={value}
-                        onChange={(event, item: string | undefined) => {
-                          onChange(item as string);
-                        }}
+                        onChange={onChange}
                         renderInput={(params) => (
                           <TextField
                             {...params}
@@ -588,9 +585,7 @@ export default function RequestForm() {
                         label="requestDateToHiring"
                         inputFormat="MM/DD/YYYY"
                         value={value}
-                        onChange={(event, item: string | undefined) => {
-                          onChange(item as string);
-                        }}
+                        onChange={onChange}
                         renderInput={(params) => (
                           <TextField
                             {...params}
