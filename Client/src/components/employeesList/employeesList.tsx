@@ -2,13 +2,16 @@ import Card from "@mui/material/Card";
 import "./employeesList.scss";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { Box, Button, ButtonGroup, Pagination, TextField } from "@mui/material";
+import { Button, ButtonGroup, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Employee, State } from "../../store/state";
 import { Roles } from "../../utils/types";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import {
   deleteEmployee,
   getEmployeesList,
@@ -153,10 +156,10 @@ export default function EmployeesList() {
                       navigateToView(req);
                     }}
                   >
-                    View
+                    <RemoveRedEyeOutlinedIcon></RemoveRedEyeOutlinedIcon>
                   </Button>
-                  <Button onClick={() => navigateToForm(req)}>Edit</Button>
-                  <Button onClick={() => deleteForm(req)}>Delete</Button>
+                  <Button onClick={() => navigateToForm(req)}><EditIcon></EditIcon></Button>
+                  <Button onClick={() => deleteForm(req)}><DeleteOutlinedIcon></DeleteOutlinedIcon></Button>
                 </ButtonGroup>
               </div>
             </CardContent>

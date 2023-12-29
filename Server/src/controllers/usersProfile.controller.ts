@@ -15,7 +15,6 @@ const getAllUserProfiles = async (req: Request, res: Response) => {
     ]);
     res.status(200).json({ requestList: requestList });
   } catch (error) {
-    console.log(error);
     res.send(error);
   }
 };
@@ -23,7 +22,6 @@ const getAllUserProfiles = async (req: Request, res: Response) => {
 const createUserProfile = async (req: any, res: any) => {
   try {
     const body = req.body;
-    console.log("req.body.skillSet===>",req.body.skillSet)
      await suggestionsController.updateSuggestions(
         req.body.skillSet,
         req.body.accountName,
@@ -31,8 +29,6 @@ const createUserProfile = async (req: any, res: any) => {
     const userProfile = new userProfileModal(body);
 
     const result = await userProfile.save();
-
-    console.log(result);
     res.status(201).json({ message: "created succesfully" });
   } catch (error) {
     res.send(error);
@@ -52,7 +48,6 @@ const getUserProfile = async (req: Request, res: Response) => {
 const updateUserProfile = async (req: Request, res: Response, next: any) => {
   try {
     const { id } = req.params;
-    console.log("req.body.skillSet===>",req.body.skillSet)
     await suggestionsController.updateSuggestions(
       req.body.skillSet,
       req.body.accountName,

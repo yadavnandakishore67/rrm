@@ -25,7 +25,7 @@ export default function Header() {
               to="/requestList"
               className="text-light text-decoration-none"
             >
-              Request list page
+              RRM
             </NavLink>
           </div>
           <div className="px-3 fs-6 pt-3">
@@ -33,7 +33,7 @@ export default function Header() {
               to="/employeesList"
               className="text-light text-decoration-none"
             >
-              Employees page
+              Employees
             </NavLink>
           </div>
           <div className="px-3 fs-6 pt-3">

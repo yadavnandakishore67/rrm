@@ -137,8 +137,7 @@ export default function RequestList() {
                               {" "}
                               <span className="fw-bolder">{val}:</span>
                               <span>
-                                {req.numberOfPositions -
-                                  req.numberOfPositionsOffered}
+                                {req.numberOfPositionsFullfilled ? req.numberOfPositionsFullfilled : 0}
                               </span>
                             </>
                           )}

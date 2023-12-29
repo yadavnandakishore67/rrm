@@ -13,7 +13,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import React, { useEffect, useState } from "react";
-import { Dayjs } from "dayjs";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -43,7 +42,6 @@ export default function RequestForm() {
     register,
     handleSubmit,
     setValue,
-    setError,
     formState: { errors },
     control,
     reset,
@@ -67,7 +65,6 @@ export default function RequestForm() {
         : userDetails?.first_name,
     };
   }
-
   const fields = [
     "accountName",
     "engagementManager",
@@ -187,7 +184,7 @@ export default function RequestForm() {
         <div className="container pt-3">
           <div className="row pb-2">
             <div className="col-sm-8 col-md-8 col-8 p-0">
-              <h4>Request Form</h4>
+              <h4>Resource Request Form</h4>
             </div>
             <div className="col-sm-4 col-md-4 col-4 text-end p-0">
               <Button variant="outlined" onClick={routeUrl}>
@@ -330,6 +327,9 @@ export default function RequestForm() {
                 <TextField
                   label="Duration"
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 }
+                  }}
                   variant="outlined"
                   size="small"
                   {...register("duration", registerOptions.duration)}
@@ -345,6 +345,9 @@ export default function RequestForm() {
                 <TextField
                   label="Cost rate cap"
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 }
+                  }}
                   variant="outlined"
                   size="small"
                   {...register("costRateCap", registerOptions.costRateCap)}
@@ -395,6 +398,9 @@ export default function RequestForm() {
                 <TextField
                   label="Number of positions"
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 }
+                  }}
                   variant="outlined"
                   size="small"
                   {...register(
@@ -456,6 +462,9 @@ export default function RequestForm() {
                 <TextField
                   label="Experience"
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 }
+                  }}
                   variant="outlined"
                   size="small"
                   {...register("experience", registerOptions.experience)}
@@ -623,6 +632,9 @@ export default function RequestForm() {
                 <TextField
                   label="Days open"
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 }
+                  }}
                   variant="outlined"
                   size="small"
                   {...register("daysOpen")}
@@ -633,6 +645,9 @@ export default function RequestForm() {
                 <TextField
                   label="Number of positions offered"
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 }
+                  }}
                   variant="outlined"
                   defaultValue={0}
                   size="small"
@@ -652,6 +667,10 @@ export default function RequestForm() {
                   type="number"
                   variant="outlined"
                   size="small"
+                  defaultValue={0}
+                  InputProps={{
+                    inputProps: { min: 0 }
+                  }}
                   {...register(
                     "numberOfPositionsFullfilled",
                     registerOptions.numberOfPositionsFullfilled
