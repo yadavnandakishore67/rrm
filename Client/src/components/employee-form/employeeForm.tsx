@@ -246,7 +246,7 @@ export default function EmployeeForm() {
       <MessageModal
         open={open}
         title={"Messaage"}
-        description={"updated successfully"}
+        description={"New employee details  added successfully"}
         onSubmit={function (value: boolean): void {
           setOpen(false);
           routeUrl();

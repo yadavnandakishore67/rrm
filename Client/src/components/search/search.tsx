@@ -1,46 +1,51 @@
-import { Button, TextField } from '@mui/material';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { useEffect, useState } from 'react';
-import { RequestForm } from '../../utils/types';
+import { Button, TextField } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import { useEffect, useState } from "react";
+import { RequestForm } from "../../utils/types";
 
 export default function SearchFilter(props: any) {
-    const { filteredList, setFilteredList } = props;
-    const [accountName, setAccountName] = useState('');
-    // const [skill, setSkills] = useState('');
-    // const [experience, setExperience] = useState<number>();
-    const [status, setStatus] = useState('');
+  const { filteredList, setFilteredList } = props;
+  const [accountName, setAccountName] = useState("");
+  // const [skill, setSkills] = useState('');
+  // const [experience, setExperience] = useState<number>();
+  const [status, setStatus] = useState("");
 
-    // useEffect(() => {
-    //     setFilteredList((filteredList as RequestForm[])?.filter((request) => {
-    //         return request.accountName.includes(accountName) &&
-    //             // request.skillSet.every((r) => r.includes(skill)) &&
-    //             // (experience ? request.experience === experience : true) &&
-    //             request.status.includes(status)
-    //     }))
-    // }, [accountName, status]);
-    const searchList=()=>{
-        setFilteredList((filteredList as RequestForm[])?.filter((request) => {
-            return request.accountName.includes(accountName) &&
-                request.status.includes(status)
-        }))
-    }
-    return (
-        <>
-            <Card>
-                <CardContent>
-                    <form className='row'>
-                        <div className=" col-md-3 col-sm-3 col-12 form-outline form-white">
-                            <TextField
-                                className="form-control"
-                                
-                                id="outlined-required"
-                                label="Account Name"
-                                value={accountName}
-                                onChange={(event) => setAccountName(event?.target.value)}
-                            />
-                        </div>
-                        {/* <div className=" col-md-3 col-sm-3 col-12 form-outline form-white">
+  // useEffect(() => {
+  //     setFilteredList((filteredList as RequestForm[])?.filter((request) => {
+  //         return request.accountName.includes(accountName) &&
+  //             // request.skillSet.every((r) => r.includes(skill)) &&
+  //             // (experience ? request.experience === experience : true) &&
+  //             request.status.includes(status)
+  //     }))
+  // }, [accountName, status]);
+  const searchList = () => {
+    setFilteredList(
+      (filteredList as RequestForm[])?.filter((request) => {
+        return (
+          request.accountName
+            .toLowerCase()
+            .includes(accountName.toLowerCase()) &&
+          request.status.toLowerCase().includes(status.toLowerCase())
+        );
+      })
+    );
+  };
+  return (
+    <>
+      <Card>
+        <CardContent>
+          <form className="row">
+            <div className=" col-md-3 col-sm-3 col-12 form-outline form-white">
+              <TextField
+                className="form-control"
+                id="outlined-required"
+                label="Account Name"
+                value={accountName}
+                onChange={(event) => setAccountName(event?.target.value)}
+              />
+            </div>
+            {/* <div className=" col-md-3 col-sm-3 col-12 form-outline form-white">
                             <TextField
                                 className="form-control"
                                 required
@@ -51,7 +56,7 @@ export default function SearchFilter(props: any) {
                                 onChange={(event) => setExperience(Number(event?.target.value))}
                             />
                         </div> */}
-                        {/* <div className=" col-md-3 col-sm-3 col-12 form-outline form-white">
+            {/* <div className=" col-md-3 col-sm-3 col-12 form-outline form-white">
                             <TextField
                                 className="form-control"
                                 required
@@ -61,24 +66,27 @@ export default function SearchFilter(props: any) {
                                 onChange={(event) => setSkills(event?.target.value)}
                             />
                         </div> */}
-                        <div className=" col-md-3 col-sm-3 col-12 form-outline form-white">
-                            <TextField
-                                className="form-control"
-                                id="outlined-required"
-                                label="Status"
-                                value={status}
-                                onChange={(event) => setStatus(event?.target.value)}
-                            />
-                        </div>
-                        <div className=' col-md-3 col-sm-3 col-12 d-flex align-items-center'>
-                        <Button variant="contained" className=' w-50'  onClick={searchList}>
-                            Search
-                        </Button>
-                        </div>
-                        
-                    </form>
-                </CardContent>
-            </Card>
-        </>
-    )
+            <div className=" col-md-3 col-sm-3 col-12 form-outline form-white">
+              <TextField
+                className="form-control"
+                id="outlined-required"
+                label="Status"
+                value={status}
+                onChange={(event) => setStatus(event?.target.value)}
+              />
+            </div>
+            <div className=" col-md-3 col-sm-3 col-12 d-flex align-items-center">
+              <Button
+                variant="contained"
+                className=" w-50"
+                onClick={searchList}
+              >
+                Search
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </>
+  );
 }
