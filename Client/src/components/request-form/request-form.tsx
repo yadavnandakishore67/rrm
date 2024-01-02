@@ -565,7 +565,6 @@ export default function RequestForm() {
                 <Controller
                   control={control}
                   name="requestDateToPractice"
-                  rules={registerOptions.requestDateToPractice}
                   render={({ field: { onChange, value } }) => (
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
@@ -578,10 +577,7 @@ export default function RequestForm() {
                           <TextField
                             {...params}
                             size="small"
-                            {...register(
-                              "requestDateToPractice",
-                              registerOptions.requestDateToPractice
-                            )}
+                            {...register("requestDateToPractice")}
                             disabled={
                               Object.keys(requestDetails).length !== 0 &&
                               (!isAdmin || requestDetails._id)

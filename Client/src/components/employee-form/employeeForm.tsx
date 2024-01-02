@@ -37,9 +37,7 @@ export default function EmployeeForm() {
   const dispatch = useDispatch<any>();
 
   const location = useLocation();
-  updatedEmployeeData = location?.state?.details
-    ? location.state.details
-    : { empId: "EMP" };
+  updatedEmployeeData = location?.state?.details ? location.state.details : {};
   const updatedEmployeeId =
     location?.state?.details && location.state.details._id;
 
