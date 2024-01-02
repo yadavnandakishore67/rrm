@@ -259,16 +259,30 @@ export default function RequestForm() {
                 </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-                <TextField
-                  label="Practice Name"
-                  type="text"
-                  variant="outlined"
-                  size="small"
-                  {...register("practiceName", registerOptions.practiceName)}
-                  disabled={
-                    Object.keys(requestDetails).length !== 0 && !isAdmin
-                  }
-                />
+                <FormControl fullWidth size="small">
+                  <InputLabel id="practiceName">Practice Name</InputLabel>
+                  <Controller
+                    name="practiceName"
+                    defaultValue=""
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        labelId="practiceName"
+                        label="Practice Name"
+                        onChange={(event) => {
+                          setValue("practiceName", event.target.value);
+                        }}
+                      >
+                        <MenuItem value={"App Dev"}>App Dev</MenuItem>
+                        <MenuItem value={"Q&A"}>Q&A</MenuItem>
+                        <MenuItem value={"ManagedServices"}>
+                          Managed services
+                        </MenuItem>
+                      </Select>
+                    )}
+                  />
+                </FormControl>
                 <small className="text-danger">
                   {errors.practiceName && errors.practiceName.message}
                 </small>
@@ -728,7 +742,7 @@ export default function RequestForm() {
                           setValue("status", event.target.value);
                         }}
                       >
-                        <MenuItem value={"open"}>Opened</MenuItem>
+                        <MenuItem value={"open"}>Open</MenuItem>
                         <MenuItem value={"close"}>Closed</MenuItem>
                       </Select>
                     )}

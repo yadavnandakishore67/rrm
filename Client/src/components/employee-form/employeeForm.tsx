@@ -30,13 +30,16 @@ export default function EmployeeForm() {
     formState: { errors },
     control,
     reset,
+    watch,
   } = useForm<Employee>();
   const [open, setOpen] = useState<boolean>(false);
   let updatedEmployeeData: any = {};
   const dispatch = useDispatch<any>();
 
   const location = useLocation();
-  updatedEmployeeData = location?.state?.details ? location.state.details : {};
+  updatedEmployeeData = location?.state?.details
+    ? location.state.details
+    : { empId: "EMP" };
   const updatedEmployeeId =
     location?.state?.details && location.state.details._id;
 
@@ -83,6 +86,7 @@ export default function EmployeeForm() {
   const routeUrl = () => {
     navigate("/employeesList");
   };
+
   return (
     <>
       <div className="container employee-form">
@@ -107,6 +111,7 @@ export default function EmployeeForm() {
                   label="Employee Id"
                   variant="outlined"
                   size="small"
+                  focused
                   {...register("empId", registerOptions.empId)}
                 />
                 <small className="text-danger">
