@@ -20,7 +20,7 @@ export default function EmployeeView() {
 
   return (
     <>
-      <div className="employee-view container mt-4">
+      <div className="employee-view container mt-4 text-capitalize">
         <div className="row pb-2">
           <div className="col-sm-8 col-md-8 col-8 p-0">
             <h4>Employee Details</h4>

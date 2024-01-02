@@ -96,6 +96,7 @@ export default function RequestList() {
       {filteredListData?.length > 0 ? (
         filteredListData?.map((req: RequestForm, i: number) => (
           <Accordion
+            className="text-capitalize"
             key={i}
             expanded={expanded === `panel${i}`}
             onChange={handleChange(`panel${i}`)}
@@ -137,7 +138,9 @@ export default function RequestList() {
                               {" "}
                               <span className="fw-bolder">{val}:</span>
                               <span>
-                                {req.numberOfPositionsFullfilled ? req.numberOfPositionsFullfilled : 0}
+                                {req.numberOfPositionsFullfilled
+                                  ? req.numberOfPositionsFullfilled
+                                  : 0}
                               </span>
                             </>
                           )}

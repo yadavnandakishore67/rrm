@@ -85,7 +85,7 @@ export default function EmployeeForm() {
   };
   return (
     <>
-      <div className="container">
+      <div className="container employee-form">
         <div className="container pt-3">
           <div className="row pb-2">
             <div className="col-sm-8 col-md-8 col-8 p-0">

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import {
   deleteEmployee,
   getEmployeesList,
@@ -67,9 +67,10 @@ export default function EmployeesList() {
     setPage(0);
     setFilteredList(
       (employeesList as Employee[])?.filter((request) => {
-        return request.empName
-          .toLowerCase()
-          .includes(searchString.toLowerCase());
+        return (
+          request.empName.toLowerCase().includes(searchString.toLowerCase()) ||
+          request.empId.toLowerCase().includes(searchString.toLowerCase())
+        );
       })
     );
   }
@@ -112,7 +113,7 @@ export default function EmployeesList() {
       </div>
       {filteredListData?.length > 0 ? (
         filteredListData.map((req: Employee, i: number) => (
-          <Card key={i}>
+          <Card key={i} className="text-capitalize">
             <CardContent>
               <div className="discription">
                 <div>
@@ -158,8 +159,12 @@ export default function EmployeesList() {
                   >
                     <RemoveRedEyeOutlinedIcon></RemoveRedEyeOutlinedIcon>
                   </Button>
-                  <Button onClick={() => navigateToForm(req)}><EditIcon></EditIcon></Button>
-                  <Button onClick={() => deleteForm(req)}><DeleteOutlinedIcon></DeleteOutlinedIcon></Button>
+                  <Button onClick={() => navigateToForm(req)}>
+                    <EditIcon></EditIcon>
+                  </Button>
+                  <Button onClick={() => deleteForm(req)}>
+                    <DeleteOutlinedIcon></DeleteOutlinedIcon>
+                  </Button>
                 </ButtonGroup>
               </div>
             </CardContent>

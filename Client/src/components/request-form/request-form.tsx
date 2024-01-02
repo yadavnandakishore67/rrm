@@ -87,7 +87,7 @@ export default function RequestForm() {
     "interviewStatus",
     "status",
     "tentativeBillingStartDate",
-"requestDateToPractice",
+    "requestDateToPractice",
     "requestDateToHiring",
     "clientInterivew",
     "newComment",
@@ -149,7 +149,7 @@ export default function RequestForm() {
         createdBy: userDetails?._id,
         updatedBy: userDetails?._id,
       };
-      console.log("requestData===>",requestData)
+      console.log("requestData===>", requestData);
       dispatch(createUserProfile(requestData));
     } else {
       requestDetails.comments.push({
@@ -180,7 +180,7 @@ export default function RequestForm() {
   };
   return (
     <>
-      <div className="container">
+      <div className="container request-form">
         <div className="container pt-3">
           <div className="row pb-2">
             <div className="col-sm-8 col-md-8 col-8 p-0">
@@ -260,7 +260,7 @@ export default function RequestForm() {
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
-                  label="Practice name"
+                  label="Practice Name"
                   type="text"
                   variant="outlined"
                   size="small"
@@ -275,7 +275,7 @@ export default function RequestForm() {
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
-                  label="Sub practice name"
+                  label="Sub Practice Name"
                   type="text"
                   variant="outlined"
                   size="small"
@@ -287,7 +287,7 @@ export default function RequestForm() {
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
-                  label="Sub sub practice name"
+                  label="Sub Sub Practice Name"
                   type="text"
                   variant="outlined"
                   size="small"
@@ -308,7 +308,7 @@ export default function RequestForm() {
                       <Select
                         {...field}
                         labelId="positionType"
-                        label="Position type"
+                        label="Position Type"
                         onChange={(event) => {
                           setValue("positionType", event.target.value);
                         }}
@@ -328,7 +328,7 @@ export default function RequestForm() {
                   label="Duration"
                   type="number"
                   InputProps={{
-                    inputProps: { min: 0 }
+                    inputProps: { min: 0 },
                   }}
                   variant="outlined"
                   size="small"
@@ -343,10 +343,10 @@ export default function RequestForm() {
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
-                  label="Cost rate cap"
+                  label="Cost Rate Cap"
                   type="number"
                   InputProps={{
-                    inputProps: { min: 0 }
+                    inputProps: { min: 0 },
                   }}
                   variant="outlined"
                   size="small"
@@ -359,7 +359,7 @@ export default function RequestForm() {
                   {errors.costRateCap && errors.costRateCap.message}
                 </small>
               </div>
-             <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+              <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <Controller
                   control={control}
                   name="tentativeBillingStartDate"
@@ -367,7 +367,7 @@ export default function RequestForm() {
                   render={({ field: { onChange, value } }) => (
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="Tentative billing start date"
+                        label="Tentative Billing Start Date"
                         inputFormat="MM/DD/YYYY"
                         value={value}
                         onChange={onChange}
@@ -396,10 +396,10 @@ export default function RequestForm() {
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
-                  label="Number of positions"
+                  label="Number Of Positions"
                   type="number"
                   InputProps={{
-                    inputProps: { min: 0 }
+                    inputProps: { min: 0 },
                   }}
                   variant="outlined"
                   size="small"
@@ -463,7 +463,7 @@ export default function RequestForm() {
                   label="Experience"
                   type="number"
                   InputProps={{
-                    inputProps: { min: 0 }
+                    inputProps: { min: 0 },
                   }}
                   variant="outlined"
                   size="small"
@@ -498,7 +498,7 @@ export default function RequestForm() {
                           {...params}
                           variant="outlined"
                           size="small"
-                          label="Skill set"
+                          label="Skill Set"
                         />
                       )}
                       disabled={
@@ -523,7 +523,7 @@ export default function RequestForm() {
                       <Select
                         {...field}
                         labelId="client-interview"
-                        label="clientInterivew"
+                        label="Client Interivew"
                         onChange={(event) => {
                           setValue("clientInterivew", event.target.value);
                         }}
@@ -546,9 +546,10 @@ export default function RequestForm() {
                   render={({ field: { onChange, value } }) => (
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="Request date to practice"
+                        label="Request Date To Practice"
                         inputFormat="MM/DD/YYYY"
-                        value={value}
+                        value={value ? value : new Date()}
+                        disabled
                         onChange={onChange}
                         renderInput={(params) => (
                           <TextField
@@ -591,7 +592,7 @@ export default function RequestForm() {
                   render={({ field: { onChange, value } }) => (
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        label="requestDateToHiring"
+                        label="Request Date To Hiring"
                         inputFormat="MM/DD/YYYY"
                         value={value}
                         onChange={onChange}
@@ -630,10 +631,10 @@ export default function RequestForm() {
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
-                  label="Days open"
+                  label="Days Open"
                   type="number"
                   InputProps={{
-                    inputProps: { min: 0 }
+                    inputProps: { min: 0 },
                   }}
                   variant="outlined"
                   size="small"
@@ -643,10 +644,10 @@ export default function RequestForm() {
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
-                  label="Number of positions offered"
+                  label="Number Of Positions Offered"
                   type="number"
                   InputProps={{
-                    inputProps: { min: 0 }
+                    inputProps: { min: 0 },
                   }}
                   variant="outlined"
                   defaultValue={0}
@@ -663,13 +664,13 @@ export default function RequestForm() {
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
-                  label="Number of positions full filled"
+                  label="Number Of Positions Fulfilled"
                   type="number"
                   variant="outlined"
                   size="small"
                   defaultValue={0}
                   InputProps={{
-                    inputProps: { min: 0 }
+                    inputProps: { min: 0 },
                   }}
                   {...register(
                     "numberOfPositionsFullfilled",
@@ -684,7 +685,7 @@ export default function RequestForm() {
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <FormControl fullWidth size="small">
                   <InputLabel id="demo-simple-select-label">
-                    Interview status
+                    Interview Status
                   </InputLabel>
                   <Controller
                     name="interviewStatus"
@@ -727,8 +728,8 @@ export default function RequestForm() {
                           setValue("status", event.target.value);
                         }}
                       >
-                        <MenuItem value={"open"}>Open</MenuItem>
-                        <MenuItem value={"close"}>Close</MenuItem>
+                        <MenuItem value={"open"}>Opened</MenuItem>
+                        <MenuItem value={"close"}>Closed</MenuItem>
                       </Select>
                     )}
                   />
@@ -740,7 +741,7 @@ export default function RequestForm() {
 
               {Object.keys(requestDetails).length !== 0 && (
                 <div className="form-group col-sm-12 col-md-12 col-12">
-                  <label className="control-label fw-bold">comments:</label>
+                  <label className="control-label fw-bold">Comments:</label>
                   <div className="form-control-static">
                     <table className="table">
                       <thead>

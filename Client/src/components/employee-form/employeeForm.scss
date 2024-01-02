@@ -1,3 +1,9 @@
 .MuiTextField-root {
   width: 100%;
 }
+
+.employee-form {
+  & input {
+    text-transform: capitalize;
+  }
+}
