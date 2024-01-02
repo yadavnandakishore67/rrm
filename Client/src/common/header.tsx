@@ -39,7 +39,11 @@ export default function Header() {
           <div className="px-3 fs-6 pt-3">
             <AccountCircleIcon fontSize="medium" /> <span>Hi {userName}</span>
           </div>
-          <div className="px-3 fs-6 cursor-pointer pt-3" onClick={logout}>
+          <div
+            className="px-3 fs-6 cursor-pointer pt-3"
+            style={{ cursor: "pointer" }}
+            onClick={logout}
+          >
             <PowerSettingsNewIcon fontSize="medium" />
           </div>
         </div>

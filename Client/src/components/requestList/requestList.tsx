@@ -75,7 +75,7 @@ export default function RequestList() {
     <div className="container pt-3 mh-600">
       <div className="row pb-2">
         <div className="col-sm-8 col-md-8 col-8">
-          <h4>Request List</h4>
+          <h4>Resource Request List</h4>
         </div>
         {role === Roles.admin && (
           <div className="col-sm-4 col-md-4 col-4">
@@ -151,7 +151,7 @@ export default function RequestList() {
                   <div className="col-md-2 col-sm-12 col-12 ">
                     <Button
                       variant="outlined"
-                      className="float-end"
+                      className="float-end ms-2"
                       onClick={() => navigateToForm(req)}
                     >
                       <EditIcon></EditIcon>

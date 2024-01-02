@@ -173,6 +173,7 @@ export default function RequestForm() {
     setOpen(true);
   }
 
+  const locations = ["Hyderabad", "Gurugram", "Pune", "Banglore"];
   const navigate = useNavigate();
 
   const routeUrl = () => {
@@ -340,6 +341,7 @@ export default function RequestForm() {
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
                 <TextField
                   label="Duration"
+                  placeholder="Number Of Months"
                   type="number"
                   InputProps={{
                     inputProps: { min: 0 },
@@ -446,28 +448,35 @@ export default function RequestForm() {
                 </small>
               </div>
               <div className="col-xs-12 col-sm-6 col-md-4 my-2">
-                <FormControl fullWidth size="small">
-                  <InputLabel id="status">Location</InputLabel>
-                  <Controller
-                    name="location"
-                    defaultValue=""
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        labelId="status"
-                        label="Status"
-                        onChange={(event) => {
-                          setValue("location", event.target.value);
-                        }}
-                      >
-                        <MenuItem value={"gurugram"}>Gurugram</MenuItem>
-                        <MenuItem value={"hyderabad"}>Hyderabad</MenuItem>
-                        <MenuItem value={"pune"}>Pune</MenuItem>
-                      </Select>
-                    )}
-                  />
-                </FormControl>
+                <Controller
+                  control={control}
+                  name="location"
+                  rules={registerOptions.location}
+                  render={({ field: { onChange } }) => (
+                    <Autocomplete
+                      multiple
+                      limitTags={3}
+                      id="location"
+                      options={locations}
+                      getOptionLabel={(option) => option}
+                      onChange={(event, item) => {
+                        onChange(item);
+                      }}
+                      defaultValue={requestDetails.location}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          size="small"
+                          label="Location"
+                        />
+                      )}
+                      disabled={
+                        Object.keys(requestDetails).length !== 0 && !isAdmin
+                      }
+                    />
+                  )}
+                />
                 <small className="text-danger">
                   {errors.location && errors.location.message}
                 </small>
@@ -751,6 +760,15 @@ export default function RequestForm() {
                 <small className="text-danger">
                   {errors.status && errors.status.message}
                 </small>
+              </div>
+
+              <div className="col-xs-12 col-sm-6 col-md-4 my-2">
+                <TextField
+                  label="Email"
+                  type="email"
+                  variant="outlined"
+                  size="small"
+                />
               </div>
 
               {Object.keys(requestDetails).length !== 0 && (
