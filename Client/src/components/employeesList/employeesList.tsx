@@ -126,7 +126,7 @@ export default function EmployeesList() {
                 </div>
                 <div>
                   <Typography variant="overline">Experience</Typography>
-                  <Typography>{req.experience}</Typography>
+                  <Typography>{req.experience} Years</Typography>
                 </div>
                 <div>
                   <Typography variant="overline">Role</Typography>

@@ -6,6 +6,7 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    // word-break: break-word;
     gap: 10px;
     & .MuiTypography-overline {
       color: rgb(14, 179, 247);
@@ -15,6 +16,10 @@
     }
     & .MuiButtonGroup-outlined {
       align-self: center;
+    }
+    & div {
+      width: 120px;
+      overflow-wrap: anywhere;
     }
   }
 }
